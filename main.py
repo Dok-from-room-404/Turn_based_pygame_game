@@ -73,7 +73,7 @@ class Main:
         screen = pygame.display.set_mode(size)
         
         game = Game(self.image, sp_save)
-        
+        game.show_test_level(screen)
         #game.show_menu(screen, clock_fps)
         
         
