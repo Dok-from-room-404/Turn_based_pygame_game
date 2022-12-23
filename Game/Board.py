@@ -7,21 +7,43 @@ import pygame
 
 
 
+# Класс отвечающий за прорисовку уровня
+class Board:
+    def __init__(self, block_size:int=50, dic_image_from_level:dict={}, sp_ctop_block:list=[]) -> None:
+        '''Инициализирует класс.\n
+        block_size – Размер каждого блока\n
+        dic_image_from_level - словарь с текстурами для игры где каждая текстура привязана к символу (для уровня)\n
+        sp_ctop_block - Список блоков препятствий'''
+        self.block_size = block_size
+        self.dic_image_from_level = dic_image_from_level
+        self.sp_ctop_block = sp_ctop_block
+        
+    def render(self, screen, level, width:int, height:int, bias_):
+        pass
+
+
+
+
+
+
 
 class Board:
-    def __init__(self, width, height, cell_size=50, dic_image_from_level={}):
-        # 
+    def __init__(self, width:int, height:int, cell_size:int=50, dic_image_from_level:dict={}):
+        # длина уровня
         self.width = width
-        
+        # Высота уровня
         self.height = height
-        
+        # Размер каждого блока
         self.cell_size = cell_size
-        
+        # Блоки куда нельзя ходить
         self.not_go_board = []
+        # Позиция актера
         self.actor_pos = []
+        # Смещение влево
         self.left = 0
+        # Смещение вниз
         self.top = 0
-        
+        # словарь с текстурами для игры где каждая текстура привязана к символу (для уровня)
         self.dic_image_from_level = dic_image_from_level
 
  
@@ -40,16 +62,16 @@ class Board:
                 
                 if level_res == "@":
                     titleRect = self.dic_image_from_level["."].get_rect()
-                    titleRect.bottomleft = (n_x, n_y + 50)
-                    self.actor_pos = [n_x, n_y + 50]
+                    titleRect.bottomleft = (n_x, n_y + self.cell_size)
+                    self.actor_pos = [n_x, n_y + self.cell_size]
                     screen.blit(self.dic_image_from_level["."], titleRect)
                     
                     
                 if level_res == "#":
-                    self.not_go_board.append([n_x, n_y + 50])
+                    self.not_go_board.append([n_x, n_y + self.cell_size])
  
                 titleRect = self.dic_image_from_level[level[y][x]].get_rect()
-                titleRect.bottomleft = (n_x, n_y + 50)
+                titleRect.bottomleft = (n_x, n_y + self.cell_size)
                 
                 screen.blit(self.dic_image_from_level[level[y][x]], titleRect)
         
@@ -73,14 +95,14 @@ class Board:
                 
                 
     def go_left(self, screen): 
-        res = [self.actor_pos[0] - 50, self.actor_pos[1]]
+        res = [self.actor_pos[0] - self.cell_size, self.actor_pos[1]]
         if self.chek(res):
             self.last_pos_actor(screen)
             self.go(screen, res)
         
     
     def go_right(self, screen): 
-        res = [self.actor_pos[0] + 50, self.actor_pos[1]]
+        res = [self.actor_pos[0] + self.cell_size, self.actor_pos[1]]
         if self.chek(res):
             self.last_pos_actor(screen)
             self.go(screen, res)
@@ -90,14 +112,14 @@ class Board:
         
     
     def go_up(self, screen): 
-        res = [self.actor_pos[0], self.actor_pos[1] - 50]
+        res = [self.actor_pos[0], self.actor_pos[1] - self.cell_size]
         if self.chek(res):
             self.last_pos_actor(screen)
             self.go(screen, res)
 
     
     def go_down(self, screen): 
-        res = [self.actor_pos[0], self.actor_pos[1] + 50]
+        res = [self.actor_pos[0], self.actor_pos[1] + self.cell_size]
         if self.chek(res):
             self.last_pos_actor(screen)
             self.go(screen, res)
