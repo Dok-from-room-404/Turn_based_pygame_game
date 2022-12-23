@@ -17,6 +17,8 @@ import sys
 class Main:
     def launcher(self) -> None:
         '''Необходима для запуска и получения инфы из лаунчера'''
+        # Список с сохранениями
+        sp_save = []
         # Количество обновлений экрана
         FPS = 30
         # Размер окна игры
@@ -49,7 +51,9 @@ class Main:
             "obstacles_tree": pygame.image.load("images\\obstacles\\tree\\{name}.png".format(name = name)),
             
             "wall_stone": pygame.image.load("images\\wall\\stone\\{name}.png".format(name = name)),
-            "wall_tree": pygame.image.load("images\\wall\\tree\\{name}.png".format(name = name))
+            "wall_tree": pygame.image.load("images\\wall\\tree\\{name}.png".format(name = name)),
+            
+            "actor": pygame.image.load('"images\\hero\\{name}.png'.format(name = name)),
             
         }
 
