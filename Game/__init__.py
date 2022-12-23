@@ -19,12 +19,14 @@ class Game:
     #     size - список указывающий размеры окна игры
     #     fps - обозначает частоту обновления экрана [кадр/сек]'''
     
-    def __init__(self, image:dict, sp_save:list=[]) -> None:
+    def __init__(self, image:dict, sp_save:list=[], block_size:int=50) -> None:
         '''Инициализирует класс.\n
-        image – словарь с текстурами для игры
-        sp_save - cписок с сохранениями'''
+        image – словарь с текстурами для игры\n
+        sp_save - cписок с сохранениями\n
+        block_size - размер блока'''
         self.image = image
         self.sp_save = sp_save
+        self.block_size = block_size
         # Словарь где каждая текстура привязана к символу (для уровня)
         self.dic_image_from_level = {
             ".": self.image["floor_grass"], 
@@ -39,36 +41,23 @@ class Game:
             
             "@":  self.image["actor"]}
         
+        # Список блоков препятствий
+        self.sp_ctop_block = ["#", "$", ":", ";"]
+        # Класс отвечающий за прорисовку уровня
+        self.Board = Board(self.block_size, self.dic_image_from_level, self.sp_ctop_block)
         
-    def show_menu(self, screen, clock_fps) -> None:
-        """Отображает меню, пока пользователь не нажмет клавишу"""
         
-        #titleRect = self.dic_image['title'].get_rect()
-        screen.fill((17, 189, 234))
-        #screen.blit(self.dic_image['title'], titleRect)
-
-        font = pygame.font.Font('freesansbold.ttf', 18)
-        instSurf = font.render("Для начала игры нужно нажать Enter", 1, (0, 0, 0))
         
-        instRect = instSurf.get_rect()
-        instRect.top = 50
-        instRect.centerx = 175
         
-        screen.blit(instSurf, instRect)
-        pygame.display.flip()
         
-        while True: # Основной цикл для стартового экрана.
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    sys.exit()
-                elif event.type == KEYDOWN:
-                    if event.key == K_ESCAPE:
-                        sys.exit()
-                    if event.key == K_RETURN:
-                        return # пользователь нажал клавишу, поэтому вернитесь.
-            pygame.display.update()
-            clock_fps.tick()
-            
+        
+        
+        
+        
+        
+        
+        
+      
     def show_test_level(self, screen):
         # уровень
         level = [['.', '.', '.', '#', '#', '#', '.', '.', '.', '.', '.'], 
@@ -86,5 +75,5 @@ class Game:
         screen.fill((17, 189, 234))
         # Выводим длину и высоту уровня
         print(len(level[0]), len(level))
-        self.board = Board(len(level[0]), len(level), 50, self.dic_image_from_level)
+        self.board = Board(len(level[0]), len(level), self.block_size, self.dic_image_from_level)
         self.board.render(screen, level)
