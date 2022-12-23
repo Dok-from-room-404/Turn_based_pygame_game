@@ -51,15 +51,6 @@ class Game:
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-      
     def show_test_level(self, screen):
         # уровень
         level = [['.', '.', '.', '#', '#', '#', '.', '.', '.', '.', '.'], 
