@@ -20,10 +20,6 @@ class Board:
         self.sp_ctop_block = sp_ctop_block
         self.actor_image = actor_image
         
-
-        
-        
-        
     def render(self, screen, level:str, width:int, height:int, block_to_acter:str=".", bias_left:int=0, bias_top:int=0) -> None:
         '''Данная функция необходима для рендера уровня\n
         screen — холст, на котором нужно рисовать\n
@@ -33,7 +29,6 @@ class Board:
         block_to_acter - чем заполнять после актера (символ из словаря для уровня)\n
         bias_left - Смещение влево (по оси x)\n
         bias_top - Смещение вниз (по оси y)'''
-        
         # Блоки куда нельзя ходить
         self.not_go_board = []
         # Позиция актера
@@ -46,9 +41,8 @@ class Board:
             for x in range(width):
                 n_x, n_y = bias_left + self.block_size * x, bias_top + self.block_size * y
                 k_x =  k_y = self.block_size
-                
                 pygame.draw.rect(screen, wcolor, (n_x, n_y, k_x, k_y), 1)
-
+                # Символ уровня
                 level_res = level[y][x]
                 
                 if level_res == self.actor_image:
@@ -72,16 +66,14 @@ class Board:
                 titleRect.bottomleft = (n_x, n_y + self.block_size)
                 
                 screen.blit(self.dic_image_from_level[level[y][x]], titleRect)
+                
+    ##############################
+    # Следующий блок кода отвечает за передвижение гг 
 
-
-        
-        
     def __chek(self, res:list) -> bool:
         '''Проверяет что гг может идти в заданном направлении\n
         res - положение гг с учетом хода'''
         return res not in self.not_go_board and (res[0] > 0 and res[1] > 0)
-        
-        
         
     def __last_pos_actor(self, screen) -> None: 
         '''Позволяет закрасить клетку где был гг до хода\n
@@ -117,10 +109,6 @@ class Board:
             self.__last_pos_actor(screen)
             self.__go(screen, res)
 
-        
-        
-        
-    
     def go_up(self, screen): 
         '''Данный метод отвечает за возможность ходить вперед\n
         screen — холст, на котором нужно рисовать'''
@@ -129,7 +117,6 @@ class Board:
             self.__last_pos_actor(screen)
             self.__go(screen, res)
 
-    
     def go_down(self, screen): 
         '''Данный метод отвечает за возможность ходить назад\n
         screen — холст, на котором нужно рисовать'''
