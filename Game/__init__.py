@@ -43,8 +43,10 @@ class Game:
         
         # Список блоков препятствий
         self.sp_ctop_block = ["#", "$", ":", ";"]
+        # символ представляющий персонажа
+        self.actor_image = "@"
         # Класс отвечающий за прорисовку уровня
-        self.Board = Board(self.block_size, self.dic_image_from_level, self.sp_ctop_block)
+        self.board = Board(self.block_size, self.dic_image_from_level, self.sp_ctop_block, self.actor_image)
         
         
         
@@ -75,5 +77,6 @@ class Game:
         screen.fill((17, 189, 234))
         # Выводим длину и высоту уровня
         print(len(level[0]), len(level))
-        self.board = Board(len(level[0]), len(level), self.block_size, self.dic_image_from_level)
-        self.board.render(screen, level)
+        
+        #self.board = Board(len(level[0]), len(level), self.block_size, self.dic_image_from_level)
+        self.board.render(screen, level, len(level[0]), len(level), '.', 20)
