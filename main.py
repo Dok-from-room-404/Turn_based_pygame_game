@@ -88,17 +88,17 @@ class Main:
                     sys.exit()  
                     
                 elif event.type == KEYDOWN:
-                    if event.key == K_UP:
+                    if event.key == K_UP or event.key == K_w:
                         print("k_UP")
                         game.board.go_up(screen)
 
-                    if event.key == K_DOWN:
+                    if event.key == K_DOWN or event.key == K_s:
                         print("k_DOWN")
                         game.board.go_down(screen)
-                    if event.key == K_RIGHT:
+                    if event.key == K_RIGHT or event.key == K_d:
                         print("k_RIGHT")
                         game.board.go_right(screen)
-                    if event.key == K_LEFT:
+                    if event.key == K_LEFT or event.key == K_a:
                         print("k_LEFT")
                         game.board.go_left(screen)
                     
