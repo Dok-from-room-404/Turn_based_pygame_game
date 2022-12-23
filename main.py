@@ -86,6 +86,22 @@ class Main:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()  
+                    
+                elif event.type == KEYDOWN:
+                    if event.key == K_UP:
+                        print("k_UP")
+                        game.board.go_up(screen)
+    
+                    if event.key == K_DOWN:
+                        print("k_DOWN")
+                        game.board.go_down(screen)
+                    if event.key == K_RIGHT:
+                        print("k_RIGHT")
+                        game.board.go_right(screen)
+                    if event.key == K_LEFT:
+                        print("k_LEFT")
+                        game.board.go_left(screen)
+                    
     
             clock_fps.tick(fps)
             # смена (отрисовка) кадра:
