@@ -2,6 +2,7 @@
 
 
 
+# Импорт модулей
 import pygame
 
 
@@ -9,13 +10,18 @@ import pygame
 
 class Board:
     def __init__(self, width, height, cell_size=50, dic_image_from_level={}):
+        # 
         self.width = width
+        
         self.height = height
+        
         self.cell_size = cell_size
+        
         self.not_go_board = []
         self.actor_pos = []
         self.left = 0
         self.top = 0
+        
         self.dic_image_from_level = dic_image_from_level
 
  
