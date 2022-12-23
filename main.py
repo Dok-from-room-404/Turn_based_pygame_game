@@ -6,6 +6,7 @@
 import pygame
 from pygame.locals import *
 import sys
+from Game import *
 
 
 
@@ -22,11 +23,12 @@ class Main:
         # Количество обновлений экрана
         FPS = 30
         # Размер окна игры
-        size = width, height = 1_600, 900
+        size = width, height = [1280, 720]
         # Маштабирование блоков(Размер блока)
         block_scaling = 100
         # Выбираем блоки по масштабу 
         self.load_image(block_scaling)
+        self.game(size, FPS, sp_save)
         
         
     def load_image(self, block_scaling:int=100) -> None:
@@ -53,9 +55,38 @@ class Main:
             "wall_stone": pygame.image.load("images\\wall\\stone\\{name}.png".format(name = name)),
             "wall_tree": pygame.image.load("images\\wall\\tree\\{name}.png".format(name = name)),
             
-            "actor": pygame.image.load('"images\\hero\\{name}.png'.format(name = name)),
+            "actor": pygame.image.load("images\\hero\\{name}.png".format(name = name)),
             
         }
+        
+    def game(self, size:list= [1280, 720], fps:int=30, sp_save:list=[]) -> None: 
+        '''Необходима для взаимодействия с игрой\n
+        size - список указывающий размеры окна игры\n
+        fps - обозначает частоту обновления экрана [кадр/сек]\n
+        sp_save - cписок с сохранениями'''
+        
+        pygame.init()
+        pygame.display.set_caption('Игра')
+        
+        clock_fps = pygame.time.Clock()
+        
+        screen = pygame.display.set_mode(size)
+        
+        game = Game(self.image, sp_save)
+        
+        #game.show_menu(screen, clock_fps)
+        
+        
+        print("show")
+
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()  
+    
+            clock_fps.tick(fps)
+            # смена (отрисовка) кадра:
+            pygame.display.flip()
 
             
     
