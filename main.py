@@ -91,7 +91,7 @@ class Main:
                     if event.key == K_UP:
                         print("k_UP")
                         game.board.go_up(screen)
-    
+
                     if event.key == K_DOWN:
                         print("k_DOWN")
                         game.board.go_down(screen)
