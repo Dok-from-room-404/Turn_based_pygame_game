@@ -31,6 +31,7 @@ class Launcher:
 
         self.GUI = Ui_MainWindow()
         self.GUI.setupUi(self.window)
+        print(self.prog.desktop().screenGeometry())
 
         self.window.setWindowTitle("Имя окна")
         # Корректное отображение окна
@@ -47,6 +48,9 @@ class Launcher:
         options = pickle.load(file)
         file.close
         return options
+    
+    def __show_inform(self, inform):
+        '''Записывает словарь из файла параметров на элементы интерфейса'''
         
     def __connect(self) -> None:
         '''Добавляет функции на элементы интерфейса'''
