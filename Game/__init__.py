@@ -13,11 +13,13 @@ from .Board import *
 
 # Основной класс для взаимодействия с игрой
 class Game:
-    def __init__(self, image:dict, sp_save:list=[], block_size:int=50) -> None:
+    def __init__(self, image:dict, size, sp_save:list=[], block_size:int=50) -> None:
         '''Инициализирует класс.\n
         image – словарь с текстурами для игры\n
         sp_save - cписок с сохранениями\n
-        block_size - размер блока'''
+        block_size - размер блока
+        size - size of screen'''
+        self.size = size
         self.image = image
         self.sp_save = sp_save
         self.block_size = block_size
@@ -41,27 +43,14 @@ class Game:
         self.actor_image = "@"
         # Класс отвечающий за прорисовку уровня
         self.board = Board(self.block_size, self.dic_image_from_level, self.sp_ctop_block, self.actor_image)
-        
-        
-        
-        
-    def show_test_level(self, screen):
-        # уровень
-        level = [['.', '.', '.', '#', '#', '#', '.', '.', '.', '.', '.'], 
-                 ['.', '.', '#', '#', '.', '#', '.', '#', '#', '#', '#'], 
-                 ['.', '#', '#', '.', '.', '#', '#', '#', '.', '.', '#'], 
-                 ['#', '#', '.', '.', '.', '.', '.', '.', '.', '.', '#'], 
-                 ['#', '.', '.', '.', '@', '.', '.', '#', '.', '.', '#'], 
-                 ['#', '#', '#', '.', '.', '#', '#', '#', '.', '.', '#'], 
-                 ['.', '.', '#', '.', '.', '#', '.', '.', '.', '.', '#'], 
-                 ['.', '#', '#', '.', '#', '#', '.', '#', '.', '#', '#'], 
-                 ['.', '#', '.', '.', '.', '.', '.', '.', '#', '#', '.'], 
-                 ['.', '#', '.', '.', '.', '.', '.', '#', '#', '.', '.'], 
-                 ['.', '#', '#', '#', '#', '#', '#', '#', '.', '.', '.']]
-        # Заливаем окно в цвет
-        screen.fill((17, 189, 234))
-        # Выводим длину и высоту уровня
-        print(len(level[0]), len(level))
-        
-        #self.board = Board(len(level[0]), len(level), self.block_size, self.dic_image_from_level)
-        self.board.render(screen, level, len(level[0]), len(level), '.', 20)
+    def show_test_level(self) -> None:
+        '''Загрузка уровня, переход на следующий и т.д. но пока просто показывает тестовый уровень'''
+        self.level = Map(self)
+        # камера
+        self.camera = Camera(self, self.level.width, self.level.height)
+        self.board.new(self.level.map, self.camera)
+
+    def run(self, screen) -> None:
+        '''Отрисовка'''
+        self.board.update()
+        self.board.draw(screen)

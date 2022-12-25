@@ -23,7 +23,7 @@ class Main:
         # Количество обновлений экрана
         FPS = 30
         # Размер окна игры
-        size = width, height = [1280, 720]
+        size = width, height = [330, 333]
         # Маштабирование блоков(Размер блока)
         block_scaling = 100
         # Выбираем блоки по масштабу
@@ -61,7 +61,7 @@ class Main:
         return name
         
         
-    def game(self, size:list= [1280, 720], fps:int=30, sp_save:list=[], block_size:int=50) -> None: 
+    def game(self, size:list=[1280, 720], fps:int=30, sp_save:list=[], block_size:int=50) -> None:
         '''Необходима для взаимодействия с игрой\n
         size - список указывающий размеры окна игры\n
         fps - обозначает частоту обновления экрана [кадр/сек]\n
@@ -75,12 +75,8 @@ class Main:
         
         screen = pygame.display.set_mode(size)
         
-        game = Game(self.image, sp_save, block_size)
-        game.show_test_level(screen)
-        
-        
-        
-        
+        game = Game(self.image, size, sp_save, block_size)
+        game.show_test_level()
 
         while True:
             for event in pygame.event.get():
@@ -90,28 +86,20 @@ class Main:
                 elif event.type == KEYDOWN:
                     if event.key == K_UP or event.key == K_w:
                         print("k_UP")
-                        game.board.go_up(screen)
-
+                        game.board.player.moving(y=-1)
                     if event.key == K_DOWN or event.key == K_s:
                         print("k_DOWN")
-                        game.board.go_down(screen)
+                        game.board.player.moving(y=1)
                     if event.key == K_RIGHT or event.key == K_d:
                         print("k_RIGHT")
-                        game.board.go_right(screen)
+                        game.board.player.moving(x=1)
                     if event.key == K_LEFT or event.key == K_a:
                         print("k_LEFT")
-                        game.board.go_left(screen)
-                    
-    
+                        game.board.player.moving(x=-1)
+            game.run(screen)
             clock_fps.tick(fps)
             # смена (отрисовка) кадра:
             pygame.display.flip()
-
-            
-    
-    
-    
-
 
 
 # Основная функция для работы с программой
