@@ -18,8 +18,6 @@ from Game import *
 class Main:
     def launcher(self) -> None:
         '''Необходима для запуска и получения инфы из лаунчера'''
-        # Список с сохранениями
-        sp_save = []
         # Количество обновлений экрана
         FPS = 30
         # Размер окна игры
@@ -29,7 +27,7 @@ class Main:
         # Выбираем блоки по масштабу
         # В ответ получем размер блока 
         block_size = self.load_image(block_scaling)
-        self.game(size, FPS, sp_save, block_size)
+        self.game(size, FPS, block_size)
         
         
     def load_image(self, block_scaling:int=100) -> int:
@@ -61,11 +59,10 @@ class Main:
         return name
         
         
-    def game(self, size:list=[1280, 720], fps:int=30, sp_save:list=[], block_size:int=50) -> None:
+    def game(self, size:list=[1280, 720], fps:int=30, block_size:int=50) -> None:
         '''Необходима для взаимодействия с игрой\n
         size - список указывающий размеры окна игры\n
         fps - обозначает частоту обновления экрана [кадр/сек]\n
-        sp_save - cписок с сохранениями
         block_size - размер блока'''
         
         pygame.init()
