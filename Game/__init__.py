@@ -13,15 +13,13 @@ from .Board import *
 
 # Основной класс для взаимодействия с игрой
 class Game:
-    def __init__(self, image:dict, size, sp_save:list=[], block_size:int=50) -> None:
+    def __init__(self, image:dict, size, block_size:int=50) -> None:
         '''Инициализирует класс.\n
         image – словарь с текстурами для игры\n
-        sp_save - cписок с сохранениями\n
-        block_size - размер блока
+        block_size - размер блока\n
         size - size of screen'''
         self.size = size
         self.image = image
-        self.sp_save = sp_save
         self.block_size = block_size
         # Словарь где каждая текстура привязана к символу (для уровня)
         self.dic_image_from_level = {
