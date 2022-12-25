@@ -72,7 +72,7 @@ class Main:
         
         screen = pygame.display.set_mode(size)
         
-        game = Game(self.image, size, sp_save, block_size)
+        game = Game(self.image, size, block_size)
         game.show_test_level()
 
         while True:
