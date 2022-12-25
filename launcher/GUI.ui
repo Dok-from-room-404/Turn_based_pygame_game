@@ -135,6 +135,12 @@
              <pointsize>8</pointsize>
             </font>
            </property>
+           <property name="minimum">
+            <number>30</number>
+           </property>
+           <property name="maximum">
+            <number>300</number>
+           </property>
           </widget>
          </item>
          <item>
@@ -183,6 +189,9 @@
       <property name="text">
        <string>Выключить лаунчер после запуска игры</string>
       </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
      </widget>
     </item>
     <item>
@@ -201,7 +210,6 @@
    </layout>
    <zorder>run_game</zorder>
    <zorder>groupBox</zorder>
-   <zorder>verticalLayoutWidget</zorder>
    <zorder>checkBox</zorder>
   </widget>
  </widget>
