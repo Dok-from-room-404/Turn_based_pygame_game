@@ -19,7 +19,7 @@ class Main:
     def launcher(self) -> None:
         '''Необходима для запуска и получения инфы из лаунчера'''
         launcher = Launcher()
-        launcher.read_options()
+        launcher.show()
         # Количество обновлений экрана
         FPS = 30
         # Размер окна игры
@@ -69,6 +69,7 @@ class Main:
 def main():
     program_main = Main()
     program_main.launcher()
+
     
     
 if __name__ == "__main__":
