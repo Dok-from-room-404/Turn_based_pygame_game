@@ -54,7 +54,7 @@ class Main:
             "wall_stone": pygame.image.load("images\\wall\\stone\\{name}.png".format(name = name)),
             "wall_tree": pygame.image.load("images\\wall\\tree\\{name}.png".format(name = name)),
             
-            "actor": pygame.image.load('"images\\hero\\{name}.png'.format(name = name)),
+            "actor": pygame.image.load("images\\hero\\{name}.png".format(name = name)),
             
         }
 
