@@ -6,6 +6,7 @@
 import pygame
 from pygame.locals import *
 import sys
+from launcher import *
 
 
 
@@ -17,6 +18,8 @@ import sys
 class Main:
     def launcher(self) -> None:
         '''Необходима для запуска и получения инфы из лаунчера'''
+        launcher = Launcher()
+        launcher.read_options()
         # Количество обновлений экрана
         FPS = 30
         # Размер окна игры
