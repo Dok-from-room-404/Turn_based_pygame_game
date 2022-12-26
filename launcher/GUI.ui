@@ -133,7 +133,7 @@
             <bool>false</bool>
            </property>
            <property name="currentIndex">
-            <number>1</number>
+            <number>-1</number>
            </property>
            <property name="minimumContentsLength">
             <number>0</number>
@@ -147,26 +147,6 @@
            <property name="modelColumn">
             <number>0</number>
            </property>
-           <item>
-            <property name="text">
-             <string>50</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>100</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>150</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>200</string>
-            </property>
-           </item>
           </widget>
          </item>
          <item>
@@ -264,7 +244,7 @@
        <string>Выключить лаунчер после запуска игры</string>
       </property>
       <property name="checked">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="autoRepeat">
        <bool>false</bool>
