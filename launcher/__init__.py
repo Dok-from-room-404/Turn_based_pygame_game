@@ -11,15 +11,18 @@ import pickle
 import sys
 import PyQt5
 from PyQt5 import QtWidgets
+from PyQt5.QtCore import Qt
 
 
 
 
-# Класс лаунчера
 class Launcher:
-    def show(self) -> None:
-        '''Данный метод показывает окно лаунчера'''
-        options = self.__read_options()
+    '''Класс лаунчера'''
+    def __init__(self) -> None:
+        # Коэффициент масштабирования
+        self.sp_scaling = ["50", "100", "150", "200"]
+        # Размер экрана 
+        self.sp_screen = []
         
         # QtWidgets.QApplication - Создает приложение 
         # QtWidgets.QWidget - Создает окно
@@ -31,16 +34,22 @@ class Launcher:
 
         self.GUI = Ui_MainWindow()
         self.GUI.setupUi(self.window)
-        print(self.prog.desktop().screenGeometry())
+        
+
+        self.__show_inform(self.__read_options(), self.__found_size())
+
 
         self.window.setWindowTitle("Имя окна")
+    
+    
+    
+    def show(self) -> None:
+        '''Данный метод показывает окно лаунчера'''
         # Корректное отображение окна
         self.window.show()
         # Корректное отображение окна
         sys.exit(self.prog.exec())
-        
 
-        
 
     def __read_options(self) -> dict:
         '''Данный метод получает словарь из файла параметров'''
@@ -49,11 +58,109 @@ class Launcher:
         file.close
         return options
     
-    def __show_inform(self, inform):
+    def __found_size(self) -> list:
+        '''Ищем размер экрана у пользователя и возвращаем список возможных размеров'''
+        width, height = 0, 0
+        
+        for screen in self.prog.screens():
+            screen = screen.size()
+            screen_width, screen_height = screen.width(), screen.height()
+            if screen_width > width:
+                width, height = screen_width, screen_height
+
+        if (width / 4) * 3 == height:
+            print(4, 3)
+            res = ["{0}x{1}".format(str(4 * i), str(3 * i)) for i in range(200, int((width / 4) + 1), 20)]
+        elif (width / 16) * 9 == height:
+            print(16, 9)
+            res = ["{0}x{1}".format(str(16 * i), str(9 * i)) for i in range(60, int((width / 16) + 1), 20)]
+        else:
+            print("сгоняй в магазин и купи монитор с нормальным соотношением сторон!")
+            res = ["{0}x{1}".format(str(16 * i), str(9 * i)) for i in range(60, int((width / 16) + 1), 20)]
+            
+        return res 
+    
+    def __show_inform(self, options:dict, options_size:list) -> None:
         '''Записывает словарь из файла параметров на элементы интерфейса'''
+        self.sp_screen = options_size
         
-    def __connect(self) -> None:
+        try:
+            # Вписываем коэффициент масштабирования
+            for i in self.sp_scaling:
+                self.GUI.block_scaling.addItem(i)
+
+            if options['block_scaling'] in self.sp_scaling:
+                self.GUI.block_scaling.setCurrentIndex(self.sp_scaling.index(options['block_scaling']))
+            else:
+                self.GUI.block_scaling.setCurrentIndex(1)
+        except: ...
+        
+        try:
+            # Вписываем размер экрана 
+            for i in self.sp_screen:
+                self.GUI.size.addItem(i)
+
+            if options['size'] in self.sp_screen:
+                self.GUI.size.setCurrentIndex(self.sp_screen.index(options['size']))
+            else:
+                self.GUI.size.setCurrentIndex(len(self.sp_screen) -1)
+        except: ... 
+        
+        try:
+            # Вписываем FPS
+            self.GUI.FPS.setValue(options['FPS'])
+        except: ... 
+        
+        try:
+            if options['checkBox']:
+            # Вписываем состояние лаунчера после запуска игры
+                self.GUI.checkBox.setCheckState(Qt.Checked)
+        except: ...
+
+        print(self.GUI.size.currentText())
+        print(self.GUI.block_scaling.currentText())
+        print(self.GUI.FPS.value())
+        print(self.GUI.checkBox.checkState() == Qt.Checked)
+        print(options, options_size)
+        
+    def connect(self, command,FPS:int=30) -> None:
         '''Добавляет функции на элементы интерфейса'''
-        pass
+        self.GUI.write_to_file.clicked.connect(self.__write_file)
+        self.GUI.defolt_options.clicked.connect(self.__made_defolt_options)
+        self.GUI.run_game.clicked.connect(command)
         
+        
+        
+    def __made_defolt_options(self, FPS:int=30) -> None:
+        '''Устанавливает настройки по умолчанию'''
+        self.GUI.block_scaling.setCurrentIndex(1)
+        self.GUI.size.setCurrentIndex(0)
+        self.GUI.FPS.setValue(FPS)
+        
+    def __write_file(self) -> None:
+        '''Данный метод записывает информацию с лаунчера в окно '''
+        print("__write_file")
+        dict_options = {'size': self.GUI.size.currentText(), 
+                        'block_scaling': self.GUI.block_scaling.currentText(), 
+                        'FPS': self.GUI.FPS.value(),
+                        'checkBox': self.GUI.checkBox.checkState() == Qt.Checked}
+        print(dict_options)
+        file =  open('launcher\\options.conf', 'wb')
+        pickle.dump(dict_options, file)
+        file.close()
+        
+        
+        
+    def get_inform(self) -> list:
+        '''Возвращает информацию с окна в виде списка где\n
+        0 - размер окна игры : list\n
+        1 - коэффициент масштабирования объектов в игре : int\n
+        2 - Как часто обновлять экран в игре : int\n
+        3 - Выключить лаунчер после запуска игры : bool'''
+        res = []
+        res.append([int(i) for i in self.GUI.size.currentText().split("x")])
+        res.append(int(self.GUI.block_scaling.currentText()))
+        res.append(self.GUI.FPS.value())
+        res.append(self.GUI.checkBox.checkState() == Qt.Checked)
+        return res
         
