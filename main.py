@@ -18,8 +18,10 @@ from launcher import *
 class Main:
     def launcher(self) -> None:
         '''Необходима для запуска и получения инфы из лаунчера'''
-        launcher = Launcher()
-        launcher.show()
+        self.launcher = Launcher()
+        
+        self.launcher.connect(self.get_launcher)
+        self.launcher.show()
         # Количество обновлений экрана
         FPS = 30
         # Размер окна игры
@@ -28,6 +30,10 @@ class Main:
         block_scaling = 100
         # Выбираем блоки по масштабу 
         self.load_image(block_scaling)
+        
+    def get_launcher(self) -> None:
+        '''Данная функция необходима для получения информации с лаунчера'''
+        print(self.launcher.get_inform())
         
         
     def load_image(self, block_scaling:int=100) -> None:
