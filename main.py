@@ -31,9 +31,8 @@ class Main:
         self.class_launcher.made_write_options()
 
         self.class_launcher.destroy()
-        if checkBox:
-            del self.class_launcher
-        else:
+        del self.class_launcher
+        if not checkBox:
             self.command_last_game = main
         
     def load_image(self, block_scaling:int=100) -> int:
