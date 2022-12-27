@@ -34,7 +34,7 @@ class Main:
         if checkBox:
             del self.class_launcher
         else:
-            self.command_last_game = self.class_launcher.show()
+            self.command_last_game = main
         
     def load_image(self, block_scaling:int=100) -> int:
         '''Необходима для выбора текстур по параметрам из лаунчера '''
