@@ -83,7 +83,7 @@ class Launcher:
                 self.GUI.block_scaling.setCurrentIndex(self.sp_scaling.index(options['block_scaling']))
             else:
                 self.GUI.block_scaling.setCurrentIndex(1)
-        except: ...
+        except: self.GUI.block_scaling.setCurrentIndex(1)
         
         try:
             # Вписываем размер экрана 
@@ -94,18 +94,18 @@ class Launcher:
                 self.GUI.size.setCurrentIndex(self.sp_screen.index(options['size']))
             else:
                 self.GUI.size.setCurrentIndex(len(self.sp_screen) -1)
-        except: ... 
+        except: self.GUI.size.setCurrentIndex(len(self.sp_screen) -1)
         
         try:
             # Вписываем FPS
             self.GUI.FPS.setValue(options['FPS'])
-        except: ... 
+        except: self.GUI.FPS.setValue(30)
         
         try:
             if options['checkBox']:
             # Вписываем состояние лаунчера после запуска игры
                 self.GUI.checkBox.setCheckState(Qt.Checked)
-        except: ...
+        except: self.GUI.checkBox.setCheckState(Qt.Checked)
         
     def connect(self, command, FPS:int=30) -> None:
         '''Добавляет функции на элементы интерфейса'''
