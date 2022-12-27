@@ -29,12 +29,9 @@ class Main:
         self.class_launcher.made_write_options()
 
         self.class_launcher.destroy()
-        if checkBox:
-            del self.class_launcher
-        else:
+        del self.class_launcher
+        if not checkBox:
             self.command_last_game = main
-        # Выбираем блоки по масштабу и загружаем игру
-        self.game(size, FPS, self.load_image(block_scaling))
         
     def load_image(self, block_scaling:int=100) -> int:
         '''Необходима для выбора текстур по параметрам из лаунчера '''
