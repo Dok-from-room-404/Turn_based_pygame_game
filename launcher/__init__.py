@@ -146,18 +146,21 @@ class Launcher:
     def made_write_options(self) -> None:
         '''Проверяет опции на изменение'''
         old_options = self.__read_options()
-        if old_options['size'] != self.GUI.size.currentText():
+        try:
+            if old_options['size'] != self.GUI.size.currentText():
+                res = True
+            elif old_options['block_scaling'] != self.GUI.block_scaling.currentText():
+                res = True
+
+            elif old_options['FPS'] != self.GUI.FPS.value():
+                res = True
+
+            elif old_options['checkBox'] != self.GUI.checkBox.checkState():
+                res = True
+            else:
+                res = False
+        except:
             res = True
-        elif old_options['block_scaling'] != self.GUI.block_scaling.currentText():
-            res = True
-        
-        elif old_options['FPS'] != self.GUI.FPS.value():
-            res = True
-        
-        elif old_options['checkBox'] != self.GUI.checkBox.checkState():
-            res = True
-        else:
-            res = False
         
         if res:
             msg = QtWidgets.QMessageBox()
