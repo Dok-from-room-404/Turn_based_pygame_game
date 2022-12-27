@@ -32,7 +32,7 @@ class Launcher:
         self.GUI = Ui_MainWindow()
         self.GUI.setupUi(self.window)
         self.__show_inform(self.__read_options(), self.__found_size())
-        self.window.setWindowTitle("Имя окна")
+        self.window.setWindowTitle("Лаунчер")
     
     def show(self) -> None:
         '''Данный метод показывает окно лаунчера'''
