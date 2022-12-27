@@ -18,27 +18,26 @@ from launcher import *
 class Main:
     def launcher(self) -> None:
         '''Необходима для запуска и получения инфы из лаунчера'''
-        self.launcher = Launcher()
-        
-        self.launcher.connect(self.get_launcher)
-        self.launcher.show()
-        # Количество обновлений экрана
-        FPS = 30
-        # Размер окна игры
-        size = width, height = [1280, 720]
-        # Маштабирование блоков(Размер блока)
-        block_scaling = 100
+        self.class_launcher = Launcher()
+        self.class_launcher.connect(self.get_launcher, 30)
+        self.class_launcher.show()
+
+    def get_launcher(self) -> None:
+        '''Данная функция необходима для получения информации с лаунчера'''
+        size, block_scaling, FPS, checkBox = self.class_launcher.get_inform()
         # Выбираем блоки по масштабу 
         self.load_image(block_scaling)
         
-    def get_launcher(self) -> None:
-        '''Данная функция необходима для получения информации с лаунчера'''
-        print(self.launcher.get_inform())
-        
+        self.class_launcher.made_write_options()
+
+        self.class_launcher.destroy()
+        if checkBox:
+            del self.class_launcher
+        else:
+            self.command_last_game = self.class_launcher.show()
         
     def load_image(self, block_scaling:int=100) -> None:
         '''Необходима для выбора текстур по параметрам из лаунчера '''
-        
         
         if block_scaling == 50:
             name = 25
@@ -63,8 +62,11 @@ class Main:
             "actor": pygame.image.load("images\\hero\\{name}.png".format(name = name)),
             
         }
+        
+        
+    def command_last_game(self) -> None: '''Необходима для запуска лаунчера после игры'''
 
-            
+
     
     
     
@@ -75,6 +77,11 @@ class Main:
 def main():
     program_main = Main()
     program_main.launcher()
+    
+    try:
+        program_main.command_last_game()
+    except: ...
+
 
     
     
