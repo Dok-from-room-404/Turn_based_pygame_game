@@ -36,7 +36,7 @@ class Main:
         else:
             self.command_last_game = self.class_launcher.show()
         
-    def load_image(self, block_scaling:int=100) -> None:
+    def load_image(self, block_scaling:int=100) -> int:
         '''Необходима для выбора текстур по параметрам из лаунчера '''
         
         if block_scaling == 50:
@@ -62,7 +62,7 @@ class Main:
             "actor": pygame.image.load("images\\hero\\{name}.png".format(name = name)),
             
         }
-        
+        return name
         
     def command_last_game(self) -> None: '''Необходима для запуска лаунчера после игры'''
 
