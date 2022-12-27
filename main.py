@@ -5,7 +5,6 @@
 # Импорт модулей
 import pygame
 from pygame.locals import *
-import sys
 from Game import *
 from launcher import *
 
@@ -84,11 +83,12 @@ class Main:
         
         game = Game(self.image, size, block_size)
         game.show_test_level()
-
-        while True:
+        
+        process = True
+        while process:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    sys.exit()  
+                    process = False
                     
                 elif event.type == KEYDOWN:
                     if event.key == K_UP or event.key == K_w:
