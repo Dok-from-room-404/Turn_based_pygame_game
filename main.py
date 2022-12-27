@@ -26,8 +26,6 @@ class Main:
     def get_launcher(self) -> None:
         '''Данная функция необходима для получения информации с лаунчера'''
         size, block_scaling, FPS, checkBox = self.class_launcher.get_inform()
-        # Выбираем блоки по масштабу 
-        self.load_image(block_scaling)
         
         self.class_launcher.made_write_options()
 
@@ -36,9 +34,10 @@ class Main:
             del self.class_launcher
         else:
             self.command_last_game = self.class_launcher.show()
-        self.game(size, FPS, block_scaling)
+        # Выбираем блоки по масштабу и загружаем игру
+        self.game(size, FPS, self.load_image(block_scaling))
         
-    def load_image(self, block_scaling:int=100) -> None:
+    def load_image(self, block_scaling:int=100) -> int:
         '''Необходима для выбора текстур по параметрам из лаунчера '''
         
         if block_scaling == 50:
@@ -64,7 +63,7 @@ class Main:
             "actor": pygame.image.load("images\\hero\\{name}.png".format(name = name)),
             
         }
-        
+        return name
         
     def command_last_game(self) -> None: '''Необходима для запуска лаунчера после игры'''
 
