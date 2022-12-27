@@ -36,7 +36,7 @@ class Main:
             del self.class_launcher
         else:
             self.command_last_game = self.class_launcher.show()
-        self.game(size, FPS, block_size)
+        self.game(size, FPS, block_scaling)
         
     def load_image(self, block_scaling:int=100) -> None:
         '''Необходима для выбора текстур по параметрам из лаунчера '''
