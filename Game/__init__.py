@@ -5,7 +5,6 @@
 # Импорт модулей
 import pygame
 from pygame.locals import *
-import sys
 from .Board import *
 
 
