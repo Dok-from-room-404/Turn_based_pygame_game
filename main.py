@@ -83,6 +83,7 @@ class Main:
         game.show_test_level()
         
         game_process = True
+
         while game_process:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -92,16 +93,20 @@ class Main:
                 elif event.type == KEYDOWN:
                     if event.key == K_UP or event.key == K_w:
                         print("k_UP")
-                        game.board.player.moving(y=-1)
-                    if event.key == K_DOWN or event.key == K_s:
+                        if game.board.player.moving(y=-1):
+                            game.board.player.turn += 1
+                    elif event.key == K_DOWN or event.key == K_s:
                         print("k_DOWN")
-                        game.board.player.moving(y=1)
-                    if event.key == K_RIGHT or event.key == K_d:
+                        if game.board.player.moving(y=1):
+                            game.board.player.turn += 1
+                    elif event.key == K_RIGHT or event.key == K_d:
                         print("k_RIGHT")
-                        game.board.player.moving(x=1)
-                    if event.key == K_LEFT or event.key == K_a:
+                        if game.board.player.moving(x=1):
+                            game.board.player.turn += 1
+                    elif event.key == K_LEFT or event.key == K_a:
                         print("k_LEFT")
-                        game.board.player.moving(x=-1)
+                        if game.board.player.moving(x=-1):
+                            game.board.player.turn += 1
             game.run(screen)
             clock_fps.tick(fps)
             # смена (отрисовка) кадра:

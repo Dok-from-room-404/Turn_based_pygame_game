@@ -27,17 +27,37 @@ class Board:
         self.all_sprites = pygame.sprite.Group()
         self.empty_tiles = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
+        self.enemies = pygame.sprite.Group()
+        self.moving_map = []
+
         for row, tiles in enumerate(self.map):
+            self.moving_map.append([])
             for col, tile in enumerate(tiles):
                 if tile in self.sp_ctop_block:
                     Wall(self, col, row, tile)
-                if tile == self.actor_image:
+                    Tile(self, col, row)
+                    self.moving_map[row].append(1)
+                elif tile == self.actor_image:
                     self.player = Player(self, col, row, self.actor_image)
-                Tile(self, col, row)
+                    Tile(self, col, row)
+                    self.moving_map[row].append(1)
+                elif tile == '/':
+                    Enemy(self, col, row, tile)
+                    Tile(self, col, row)
+                    self.moving_map[row].append(1)
+                else:
+                    Tile(self, col, row)
+                    self.moving_map[row].append(0)
+        print(self.moving_map)
 
     def update(self):
+        if self.player.turn == 2:
+            for enemy in self.enemies:
+                enemy.action()
+                self.player.turn = 0
         self.all_sprites.update()
         self.camera.update(self.player)
+
 
     def draw(self, screen):
         screen.fill((0, 0, 0))
@@ -75,7 +95,7 @@ class Map:
                  ['#', '#', '#', '.', '.', '#', '#', '#', '.', '.', '#'],
                  ['.', '.', '#', '.', '.', '#', '.', '.', '.', '.', '#'],
                  ['.', '#', '#', '.', '#', '#', '.', '#', '.', '#', '#'],
-                 ['.', '#', '.', '.', '.', '.', '.', '.', '#', '#', '.'],
+                 ['.', '#', '/', '.', '.', '.', '/', '.', '#', '#', '.'],
                  ['.', '#', '.', '.', '.', '.', '.', '#', '#', '.', '.'],
                  ['.', '#', '#', '#', '#', '#', '#', '#', '.', '.', '.']]
 
