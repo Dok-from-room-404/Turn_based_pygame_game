@@ -7,7 +7,8 @@ import pygame
 from pygame.locals import *
 from Game import *
 from launcher import *
-
+from io import BytesIO
+from PIL import Image
 
 
 
@@ -32,9 +33,9 @@ class Main:
         del self.class_launcher
         if not checkBox:
             self.command_last_game = main
-        self.game(size, FPS, self.load_image(block_scaling))
+        self.game(size, FPS, self.load_image(size, block_scaling))
         
-    def load_image(self, block_scaling:int=100) -> int:
+    def load_image(self, size:int, block_scaling:int=100) -> int:
         '''Необходима для выбора текстур по параметрам из лаунчера '''
         
         if block_scaling == 50:
@@ -45,6 +46,10 @@ class Main:
             name = 75
         elif block_scaling == 200:
             name = 100
+        
+        image = Image.open("images\\Menu_fon\\fon.jpg")
+        new_image = image.resize(size)
+        new_image.save('images\\fon_cash.jpg')
 
         self.image = {
             "floor_grass": pygame.image.load("images\\floor\\grass\\{name}.png".format(name = name)),
@@ -59,6 +64,7 @@ class Main:
             
             "actor": pygame.image.load("images\\hero\\{name}.png".format(name = name)),
             
+            "fon": pygame.image.load("images\\fon_cash.jpg"),
         }
         return name
         
@@ -80,33 +86,47 @@ class Main:
         screen = pygame.display.set_mode(size)
         
         game = Game(self.image, size, block_size)
-        game.show_test_level()
+        res = game.show_menu(screen, clock_fps)
+        print(res)
+        
         
         game_process = True
 
         while game_process:
+            # Если в меню выбрали закрыть меню
+            if res == "break":
+                break 
+            
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     game_process = False
                     break
-                    
-                elif event.type == KEYDOWN:
-                    if event.key == K_UP or event.key == K_w:
+                
+                if event.type == KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        print("K_ESCAPE")
+                        res = game.show_menu(screen, clock_fps)
+                        
+                    elif event.key == K_UP or event.key == K_w:
                         print("k_UP")
                         if game.board.player.moving(y=-1):
                             game.board.player.turn += 1
+                            
                     elif event.key == K_DOWN or event.key == K_s:
                         print("k_DOWN")
                         if game.board.player.moving(y=1):
                             game.board.player.turn += 1
+                            
                     elif event.key == K_RIGHT or event.key == K_d:
                         print("k_RIGHT")
                         if game.board.player.moving(x=1):
                             game.board.player.turn += 1
+                            
                     elif event.key == K_LEFT or event.key == K_a:
                         print("k_LEFT")
                         if game.board.player.moving(x=-1):
                             game.board.player.turn += 1
+         
             game.run(screen)
             clock_fps.tick(fps)
             # смена (отрисовка) кадра:
