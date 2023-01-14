@@ -33,7 +33,8 @@ class Game:
             ":": self.image["wall_stone"], 
             ";": self.image["wall_tree"], 
             
-            "@":  self.image["actor"]}
+            "@":  self.image["actor"],
+            "s": None}
         
         # Список блоков препятствий
         self.sp_ctop_block = ["#", "$", ":", ";"]
