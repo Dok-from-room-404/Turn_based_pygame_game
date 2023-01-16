@@ -1,13 +1,12 @@
-
+from PIL import Image
 
 
 
 # Импорт модулей
 import pygame
 from pygame.locals import *
-import sys
 from launcher import *
-
+from PIL import Image
 
 
 
@@ -25,8 +24,6 @@ class Main:
     def get_launcher(self) -> None:
         '''Данная функция необходима для получения информации с лаунчера'''
         size, block_scaling, FPS, checkBox = self.class_launcher.get_inform()
-        # Выбираем блоки по масштабу 
-        self.load_image(block_scaling)
         
         self.class_launcher.made_write_options()
 
@@ -34,8 +31,9 @@ class Main:
         del self.class_launcher
         if not checkBox:
             self.command_last_game = main
+        self.game(size, FPS, self.load_image(size, block_scaling))
         
-    def load_image(self, block_scaling:int=100) -> int:
+    def load_image(self, size:int, block_scaling:int=100) -> int:
         '''Необходима для выбора текстур по параметрам из лаунчера '''
         
         if block_scaling == 50:
@@ -46,6 +44,10 @@ class Main:
             name = 75
         elif block_scaling == 200:
             name = 100
+        
+        image = Image.open("images\\Menu_fon\\fon.jpg")
+        new_image = image.resize(size)
+        new_image.save('images\\fon_cash.jpg')
 
         self.image = {
             "floor_grass": pygame.image.load("images\\floor\\grass\\{name}.png".format(name = name)),
@@ -60,16 +62,23 @@ class Main:
             
             "actor": pygame.image.load("images\\hero\\{name}.png".format(name = name)),
             
+            "fon": pygame.image.load("images\\fon_cash.jpg"),
+            
+            "save_point": pygame.image.load("images\\save_point\\{name}.png".format(name = name)),
         }
         return name
         
     def command_last_game(self) -> None: '''Необходима для запуска лаунчера после игры'''
 
-
-    
-    
-    
-
+        
+        
+    def game(self, size:list=[1280, 720], fps:int=30, block_size:int=50) -> None:
+        '''Необходима для взаимодействия с игрой\n
+        size - список указывающий размеры окна игры\n
+        fps - обозначает частоту обновления экрана [кадр/сек]\n
+        block_size - размер блока'''
+        
+        #some code
 
 
 # Основная функция для работы с программой
