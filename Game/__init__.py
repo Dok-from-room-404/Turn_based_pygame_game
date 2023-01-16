@@ -33,8 +33,8 @@ class Game:
             ":": self.image["wall_stone"], 
             ";": self.image["wall_tree"], 
             
-            "@":  self.image["actor"],
-            "s": None}
+            "@": self.image["actor"],
+            "s": self.image["save_point"]}
         
         # Список блоков препятствий
         self.sp_ctop_block = ["#", "$", ":", ";"]
@@ -62,6 +62,7 @@ class Game:
             
             
         except BreakError:
+            print("BreakError")
             pygame.quit()
             return "break"
         
