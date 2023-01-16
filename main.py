@@ -65,6 +65,8 @@ class Main:
             "actor": pygame.image.load("images\\hero\\{name}.png".format(name = name)),
             
             "fon": pygame.image.load("images\\fon_cash.jpg"),
+            
+            "save_point": pygame.image.load("images\\save_point\\{name}.png".format(name = name)),
         }
         return name
         
@@ -91,10 +93,10 @@ class Main:
         
         
         game_process = True
-
         while game_process:
             # Если в меню выбрали закрыть меню
             if res == "break":
+                print("break")
                 break 
             
             for event in pygame.event.get():
@@ -127,6 +129,9 @@ class Main:
                         if game.board.player.moving(x=-1):
                             game.board.player.turn += 1
          
+            if res == "break":
+                print("break")
+                break 
             game.run(screen)
             clock_fps.tick(fps)
             # смена (отрисовка) кадра:
