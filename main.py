@@ -6,8 +6,7 @@
 import pygame
 from pygame.locals import *
 from Game import *
-from launcher import *
-from io import BytesIO
+# from launcher import *
 from PIL import Image
 
 
@@ -19,21 +18,13 @@ from PIL import Image
 class Main:
     def launcher(self) -> None:
         '''Необходима для запуска и получения инфы из лаунчера'''
-        self.class_launcher = Launcher()
-        self.class_launcher.connect(self.get_launcher, 30)
-        self.class_launcher.show()
+        # Тестовые значения
+        size : list = [1280, 720]
+        block_scaling : int = 100
+        fps : int = 30
+        block_size : int = self.load_image(size, block_scaling)
+        self.game(size, fps, block_size)
 
-    def get_launcher(self) -> None:
-        '''Данная функция необходима для получения информации с лаунчера'''
-        size, block_scaling, FPS, checkBox = self.class_launcher.get_inform()
-        
-        self.class_launcher.made_write_options()
-
-        self.class_launcher.destroy()
-        del self.class_launcher
-        if not checkBox:
-            self.command_last_game = main
-        self.game(size, FPS, self.load_image(size, block_scaling))
         
     def load_image(self, size:int, block_scaling:int=100) -> int:
         '''Необходима для выбора текстур по параметрам из лаунчера '''
