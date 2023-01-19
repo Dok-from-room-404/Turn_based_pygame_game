@@ -14,7 +14,7 @@ from PIL import Image
 
 
 # Данный класс необходим для совмещения лаунчера и игры 
-# Основной класс 
+# Основной класс ё
 class Main:
     def launcher(self) -> None:
         '''Необходима для запуска и получения инфы из лаунчера'''
@@ -80,14 +80,14 @@ class Main:
         
         game = Game(self.image, size, block_size)
         res = game.show_menu(screen, clock_fps)
-        print(res)
+        #print(res)
         
         
         game_process = True
         while game_process:
             # Если в меню выбрали закрыть меню
             if res == "break":
-                print("break")
+                #print("break")
                 break 
             
             for event in pygame.event.get():
@@ -97,31 +97,31 @@ class Main:
                 
                 if event.type == KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        print("K_ESCAPE")
+                        #print("K_ESCAPE")
                         res = game.show_menu(screen, clock_fps)
                         
                     elif event.key == K_UP or event.key == K_w:
-                        print("k_UP")
+                        #print("k_UP")
                         if game.board.player.moving(y=-1):
                             game.board.player.turn += 1
                             
                     elif event.key == K_DOWN or event.key == K_s:
-                        print("k_DOWN")
+                        #print("k_DOWN")
                         if game.board.player.moving(y=1):
                             game.board.player.turn += 1
                             
                     elif event.key == K_RIGHT or event.key == K_d:
-                        print("k_RIGHT")
+                        #print("k_RIGHT")
                         if game.board.player.moving(x=1):
                             game.board.player.turn += 1
                             
                     elif event.key == K_LEFT or event.key == K_a:
-                        print("k_LEFT")
+                        #print("k_LEFT")
                         if game.board.player.moving(x=-1):
                             game.board.player.turn += 1
          
             if res == "break":
-                print("break")
+                #print("break")
                 break 
             game.run(screen)
             clock_fps.tick(fps)
