@@ -2,9 +2,62 @@
 
 
 
-import random
 import pickle
-import sys
+
+
+class Len_Error(Exception):
+    def __init__(self, *args):
+        if args:
+            self.message = args[0]
+        else:
+            self.message = None
+
+    def __str__(self):
+        if self.message:
+            return 'Len_Error, {0} '.format(self.message)
+        else:
+            return 'Len_Error'
+        
+class Player_Error(Exception):
+    def __init__(self, *args):
+        if args:
+            self.message = args[0]
+        else:
+            self.message = None
+
+    def __str__(self):
+        if self.message:
+            return 'Player_Error, {0} '.format(self.message)
+        else:
+            return 'Player_Error'
+
+class Save_point_Error(Exception):
+    def __init__(self, *args):
+        if args:
+            self.message = args[0]
+        else:
+            self.message = None
+
+    def __str__(self):
+        if self.message:
+            return 'Save_point_Error, {0} '.format(self.message)
+        else:
+            return 'Save_point_Error'
+        
+        
+class Flager_Error(Exception):
+    def __init__(self, *args):
+        if args:
+            self.message = args[0]
+        else:
+            self.message = None
+
+    def __str__(self):
+        if self.message:
+            return 'Flager_Error, {0} '.format(self.message)
+        else:
+            return 'Flager_Error'
+
 
 
 
@@ -36,44 +89,51 @@ class Map:
     def append_string(self, level_string:str):
         '''Добавляет к уровню строку '''
         if len(level_string) != self.len_level and self.len_level != None:
-            print("Строчка имеет не правильную длину. Данная строка отклонена")
-            return 
+            # print("Строчка имеет не правильную длину. Данная строка отклонена")
+            raise Len_Error
 
 
         if simvol_player in level_string:
             if self.flag_actor:
                 # Если актер уже был добавлен и он есть в строке
-                print("Актер уже был добавлен. Данная строка отклонена")
-                return
+                # print("Актер уже был добавлен. Данная строка отклонена:")
+                raise Player_Error
             elif level_string.count(simvol_player) > 1:
                 # Если количество актеров более 1 в строке
-                print("Более одного актера в строке. Данная строка отклонена")
-                return
+                # print("Более одного актера в строке. Данная строка отклонена")
+                raise Player_Error
             else:
                 self.flag_actor = True
             
             
         if simvol_save_point in level_string:  
             if self.flag_save_point:
-                print("Точка сохранения уже была добавлена. Данная строка отклонена")
-                return
+                # print("Точка сохранения уже была добавлена. Данная строка отклонена")
+                raise Save_point_Error
             elif level_string.count(simvol_save_point) > 1:
-                print("Более одной точки сохранения в строке. Данная строка отклонена")
-                return
+                # print("Более одной точки сохранения в строке. Данная строка отклонена")
+                raise Save_point_Error
             else:
                 self.flag_save_point = True
             
         sp_string_level = []
         for i in level_string:
             if i not in simvoles:
-                print("Данный символ \'{0}\' нельзя использовать в уровне. Данная строка отклонена".format(str(i)))
+                # print("Данный символ \'{0}\' нельзя использовать в уровне. Данная строка отклонена".format(str(i)))
                 return 
             else:
                 sp_string_level.append(i)
         else:
-            print("Данная строка записана ")
+            # print("Данная строка записана ")
             self.len_level = len(level_string)
             self.list.append(sp_string_level)
+            
+    def append_list(self, *sp):
+        for i in sp:
+            stri = "".join(i)
+            # print("Добавление строки:\n{0}".format(stri))
+            self.append_string(stri)
+        
             
     def get_map(self) -> list:
         '''Возвращает карту'''
@@ -104,61 +164,106 @@ class Writer:
             print("Уровень")
             for i in maper.get_map():
                 print(i) 
-        print("Уровни")
-        for i in self.list_level:
-            print(i)
+            raise Flager_Error
+        #print("Уровни")
+        #for i in self.list_level:
+        #    print(i)
+        
             
     def save(self):
         pickle.dump(self.list_level, self.file)
         self.file.close()
         
+        
+    def __len__(self):
+        return len(self.list_level)
+        
 
 
 
 
-# Список уровней (каждый уровень представляет список)
-lvl1 = [["/", "/"],
-        ["@", "s"]]
 
-
-list_levels = [lvl1]
 
 
 if __name__ == "__main__":
-    if len(list_levels) == 0:
-        # Уровни
-        levels = Writer("levels.levl")
-        print("Желаете ли вы добавить уровень: \n1 – Да \n2 - Конец запроса уровней")
-        for i in sys.stdin:
-            if i.strip() == "1":
-                level = Map()
-                print()
-                print("Желаете ли вы добавить строчку к уровню : \n1 – Да \n2 - Конец строчек к уровню")
-                for ii in sys.stdin:   
-                    if ii.strip() == "1":
-                        level.append_string(input("Введите строчку уровня\n"))
-                        print("Карта уровня")
-                        print(level.get_map())
-                        
-                    elif ii.strip() == "2":
-                        levels.append(level)
-                        break
-                    else:
-                        print("Неправильный ввод !")
-                    print()
-                    print("Желаете ли вы добавить строчку к уровню : \n1 – Да \n2 - Конец строчек к уровню")
-
-            elif i.strip() == "2":
-                levels.save()
-                break
-            else:
-                print("Неправильный ввод !")
-            print()
-            print("Желаете ли вы добавить уровень: \n1 – Да \n2 - Конец запроса уровней")
-    else:
-        file = open("levels.levl", "wb")
-        pickle.dump(list_levels, file)
-        file.close()
-        with open("levels.levl", 'rb') as f:
-            print(pickle.load(f))
+    # Класс для добавления уровней
+    list_levels = Writer("levels.levl")
+    # Уровень 1
+    lvl1 = Map()
+    lvl1.append_list(['.', '.', '.', '#', '#', '#', '.', '.', '.', '.', '.'],
+                     ['.', '.', '#', '#', '.', '#', '.', '#', '#', '#', '#'],
+                     ['.', '#', '#', '.', '.', '#', '#', '#', '.', '.', '#'],
+                     ['#', '#', '.', '.', '.', '.', '.', '.', '.', '.', '#'],
+                     ['#', '.', '.', '.', '@', '.', '.', '#', '.', '.', '#'],
+                     ['#', '#', '#', '.', '.', '#', '#', '#', '.', '.', '#'],
+                     ['.', '.', '#', '.', '.', '#', '.', '.', '.', '.', '#'],
+                     ['.', '#', '#', '.', '#', '#', '.', '#', '.', '#', '#'],
+                     ['.', '#', '/', '.', '.', '.', '/', '.', 's', '#', '.'],
+                     ['.', '#', '.', '.', '.', '.', '.', '#', '#', '.', '.'],
+                     ['.', '#', '#', '#', '#', '#', '#', '#', '.', '.', '.'])
+    list_levels.append(lvl1)
     
+    # Уровень 2
+    lvl2 = Map()
+    lvl2.append_list(['#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'],
+                     ['#', '#', '/', '.', '.', '.', '.', '.', '.', '.', '/', '#', '#', '.', '/', '.', '.', '.', '@', '#'],
+                     ['#', '.', '.', '#', '#', '#', '#', '#', '#', '#', '.', '#', '#', '.', '.', '.', '.', '.', '.', '#'],
+                     ['#', '.', '#', '.', '.', '/', '.', '.', '.', '.', '.', '.', '#', '#', '#', '.', '.', '.', '.', '#'],
+                     ['#', '.', '#', '/', '.', '.', '.', '.', '.', '.', '.', '.', '/', '.', '.', '.', '.', '.', '.', '#'],
+                     ['#', '/', '#', '.', '.', '.', '.', '.', '/', '.', '.', '.', '#', '.', '#', '.', '.', '.', '.', '#'],
+                     ['#', '.', '.', '#', '#', '#', '#', '#', '#', '#', '.', '#', '.', '.', '#', '.', '.', '.', '.', '#'],
+                     ['#', '#', 's', '.', '.', '/', '.', '.', '.', '.', '/', '.', '.', '#', '#', '.', '.', '.', '.', '#'],
+                     ['.', '#', '#', '#', '#', '#', '#', '#', '#', '.', '.', '.', '#', '#', '.', '.', '.', '.', '.', '#'],
+                     ['#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'])
+    list_levels.append(lvl2)
+    
+    
+    # Уровень 3
+    lvl3 = Map()
+    lvl3.append_list(['#', '#', '#', '#', '#', '#', '#'],
+                     ['#', '#', '.', '.', '.', '@', '#'],
+                     ['#', '#', '.', '.', '.', '.', '#'],
+                     ['#', '#', '.', '.', '.', '.', '#'],
+                     ['#', '#', '/', '.', '.', '.', '#'],
+                     ['#', '#', '.', '.', '.', '.', '#'],
+                     ['#', '#', '.', '.', '.', '.', '#'],
+                     ['#', '#', '/', '.', '.', '.', '#'],
+                     ['#', 's', '/', '/', '/', '.', '#'],
+                     ['#', '#', '#', '#', '#', '#', '#'])
+    list_levels.append(lvl3)
+    
+    # Уровень 4
+    lvl4 = Map()
+    lvl4.append_list(['#', '#', '#', '#', '#', '#', '#', '#'],
+                     ['.', '#', '.', '.', '.', '.', '.', '#'],
+                     ['.', '#', '.', '.', '@', '.', '.', '#'],
+                     ['.', '#', '#', '.', '#', '.', '#', '#'],
+                     ['.', '#', '.', '.', '#', '.', '/', '#'],
+                     ['.', '#', '.', '.', '#', '.', '.', '#'],
+                     ['.', '#', '.', '/', '#', '.', '.', '#'],
+                     ['#', '#', '.', '#', '#', '.', '#', '#'],
+                     ['#', '.', '/', '.', '.', '/', '.', '#'],
+                     ['#', '/', '.', '.', '.', '.', '/', '#'],
+                     ['#', '#', '#', '.', '.', '/', 's', '#'],
+                     ['#', '#', '#', '#', '#', '#', '#', '#'])
+    list_levels.append(lvl4)
+    
+    
+    # Уровень 5
+    lvl5 = Map()
+    lvl5.append_list(['#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'],
+                     ['#', '#', '#', '#', '/', '.', '#', '/', 's', '#', '#'],
+                     ['#', '#', '#', '#', '.', '.', '.', '/', '/', '#', '#'],
+                     ['#', '.', '.', '.', '.', '#', '.', '.', '.', '/', '#'],
+                     ['#', '/', '.', '.', '.', '.', '/', '.', '.', '.', '#'],
+                     ['#', '#', '#', '/', '#', '.', '#', '.', '#', '/', '#'],
+                     ['#', '.', '.', '.', '.', '.', '.', '/', '.', '.', '#'],
+                     ['#', '.', '.', '/', '.', '#', '.', '.', '.', '.', '#'],
+                     ['#', '.', '#', '#', '.', '/', '.', '.', '/', '#', '#'],
+                     ['#', '@', '#', '#', '.', '.', '#', '.', '.', '#', '#'],
+                     ['#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'])
+    list_levels.append(lvl5)
+    
+
+
+    list_levels.save()
