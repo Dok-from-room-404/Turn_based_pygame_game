@@ -7,6 +7,7 @@ import pygame
 from pygame.locals import *
 from .Board import *
 from .Menu.menu import *
+import pickle
 
 
 
@@ -46,19 +47,25 @@ class Game:
         self.menu = Menu(self.image["fon"])
         # Флаг загруженного уровня True - загружен, False - не загружен
         self.stete_load_level = False
+        # Переменная для уровней
+        self.level = None
         
         
         
     def show_menu(self, screen, clock_fps):
         """Отображает титульный экран, пока пользователь не нажмет клавишу\n
-        1) Будем искать сохранения\n
+        1) Будем искать сохранения и уровни\n
         2) Будем продолжать игру\n
         3) Будем выходить из игры"""
         try:
+            file = open("Game\\levels.levl", "rb")
+            self.level = pickle.load(file)
+            file.close()
+            
             res = self.menu.show_menu(screen, clock_fps, self.stete_load_level)
             
             if res == "new_games":
-                self.show_test_level()
+                self.show_test_level(0)
             
             
         except BreakError:
@@ -69,10 +76,11 @@ class Game:
         
         
         
-    def show_test_level(self) -> None:
-        '''Загрузка уровня, переход на следующий и т.д. но пока просто показывает тестовый уровень'''
+    def show_test_level(self, ind:int=0) -> None:
+        '''Загрузка уровня, переход на следующий\n
+        ind - № уровня (индекс списка уровней) № = индекс'''
         self.stete_load_level = True
-        self.level = Map(self)
+        self.level = Map(self, self.level[ind])
         # камера
         self.camera = Camera(self, self.level.width, self.level.height)
         self.board.new(self.level.map, self.camera)
