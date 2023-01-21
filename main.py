@@ -119,6 +119,9 @@ class Main:
                         #print("k_LEFT")
                         if game.board.player.moving(x=-1):
                             game.board.player.turn += 1
+                    elif event.key == K_SPACE:
+                        game.board.player.attack()
+                        game.board.player.turn += 1
          
             if res == "break":
                 #print("break")

@@ -2,7 +2,7 @@ import pygame
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, board, x, y, image):
+    def __init__(self, board, x, y, image, hp=100, dmg=10):
         self.groups = board.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.board = board
@@ -11,6 +11,9 @@ class Player(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.turn = 0
+        self.hp = hp
+        self.dmg = dmg
+
 
     def moving(self, x=0, y=0):
         if self.collide_with_walls(x, y):
@@ -24,6 +27,11 @@ class Player(pygame.sprite.Sprite):
         if self.board.moving_map[self.y + y][self.x + x] == 0:
             return True
         return False
+
+    def attack(self):
+        for enemy in self.board.enemies:
+            if abs(enemy.x - self.x) + abs(enemy.y - self.y) == 1:
+                enemy.hp -= self.dmg
 
     def update(self):
         self.rect.x = self.x * self.board.block_size
@@ -58,7 +66,7 @@ class Tile(pygame.sprite.Sprite):
 
 class Enemy(pygame.sprite.Sprite):
     """начальный класс противников"""
-    def __init__(self, board, x, y, image):
+    def __init__(self, board, x, y, image, hp=100, dmg=10):
         self.groups = board.all_sprites, board.enemies
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.board = board
@@ -68,18 +76,21 @@ class Enemy(pygame.sprite.Sprite):
         self.y = y
         self.rect.x = x * self.board.block_size
         self.rect.y = y * self.board.block_size
+        self.hp = hp
+        self.dmg = dmg
 
     def action(self):
         '''атака, перемещение монстра (пока только перемещение)'''
-        if abs(self.board.player.x - self.x) + abs(self.board.player.y - self.y) != 1:
-            self.make_move()
+        ways = self.bfs()
+        p_cor = (self.board.player.x, self.board.player.y)
+        if abs(self.board.player.x - self.x) + abs(self.board.player.y - self.y) != 1 and p_cor in ways:
+            self.make_move(ways)
 
-    def make_move(self):
-        visited = self.bfs()
+    def make_move(self, ways):
         cur_move = (self.board.player.x, self.board.player.y)
         way = []
         while cur_move != (self.x, self.y):
-            cur_move = visited[cur_move]
+            cur_move = ways[cur_move]
             way.append(cur_move)
         self.board.moving_map[self.y][self.x] = 0
         self.x = way[-2][0]
@@ -89,6 +100,9 @@ class Enemy(pygame.sprite.Sprite):
     def update(self):
         self.rect.x = self.x * self.board.block_size
         self.rect.y = self.y * self.board.block_size
+        if self.hp <= 0:
+            self.kill()
+            self.board.moving_map[self.y][self.x] = 0
 
     def create_graf(self):
         graf = {}
