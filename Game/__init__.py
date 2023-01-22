@@ -26,7 +26,7 @@ class Game:
         self.dic_image_from_level = {
             ".": self.image["floor_grass"], 
             ",": self.image["floor_stone"], 
-            "/": self.image["floor_tree"], 
+            "'": self.image["floor_tree"], 
             
             "#": self.image["obstacles_stone"], 
             "$": self.image["obstacles_tree"], 
@@ -35,7 +35,8 @@ class Game:
             ";": self.image["wall_tree"], 
             
             "@": self.image["actor"],
-            "s": self.image["save_point"]}
+            "s": self.image["save_point"],
+            "/": self.image["opponent"] }
         
         # Список блоков препятствий
         self.sp_ctop_block = ["#", "$", ":", ";"]
