@@ -58,6 +58,8 @@ class Main:
             "fon": pygame.image.load("images\\fon_cash.jpg"),
             
             "save_point": pygame.image.load("images\\save_point\\{name}.png".format(name = name)),
+            
+            "opponent": pygame.image.load("images\\opponent\\{name}.png".format(name = name)),
         }
         return name
         
