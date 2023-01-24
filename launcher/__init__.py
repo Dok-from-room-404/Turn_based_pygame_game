@@ -27,12 +27,22 @@ class Launcher:
         # Создаем приложение с передачей информации о открытых файлов 
         # 1 идет имя скрипта остальное - открытые файлы с помощью скрипта
         self.prog = QtWidgets.QApplication(sys.argv)
+        self.prog.dpiawareness = 0
         # Создание окна
         self.window = QtWidgets.QMainWindow()
         self.GUI = Ui_MainWindow()
         self.GUI.setupUi(self.window)
+        self.__scalling()
         self.__show_inform(self.__read_options(), self.__found_size())
         self.window.setWindowTitle("Лаунчер")
+    
+    def __scalling(self) -> None:
+        '''Подгонка интерфейса под масштаб системы'''
+        screen = self.prog.screens()[0]
+        scalling = screen.logicalDotsPerInchX() / 96.0
+        width = height = 360 * scalling
+        self.window.setMinimumSize(QtCore.QSize(width, height))
+        self.window.setMaximumSize(QtCore.QSize(width, height))
     
     def show(self) -> None:
         '''Данный метод показывает окно лаунчера'''
@@ -53,13 +63,16 @@ class Launcher:
     
     def __found_size(self) -> list:
         '''Ищем размер экрана у пользователя и возвращаем список возможных размеров'''
-        width, height = 0, 0
+        screen = self.prog.screens()[0]
+        screen = screen.size()
+        width, height = screen.width(), screen.height()
         
-        for screen in self.prog.screens():
-            screen = screen.size()
-            screen_width, screen_height = screen.width(), screen.height()
-            if screen_width > width:
-                width, height = screen_width, screen_height
+        #for screen in self.prog.screens():
+        #    screen = screen.size()
+        #    print(screen)
+        #    screen_width, screen_height = screen.width(), screen.height()
+        #    if screen_width > width:
+        #        width, height = screen_width, screen_height
 
         if (width / 4) * 3 == height:
             res = ["{0}x{1}".format(str(4 * i), str(3 * i)) for i in range(200, int((width / 4) + 1), 20)]
