@@ -62,12 +62,27 @@ class Game:
             file = open("Game\\levels.levl", "rb")
             self.level = pickle.load(file)
             file.close()
-            
-            res = self.menu.show_menu(screen, clock_fps, self.stete_load_level)
+            try:
+                file = open("Game\\save\\save.sv", "rb")
+                save = pickle.load(file)
+                print(save)
+                file.close()
+            except:
+                save = 0
+                file = open("Game\\save\\save.sv", "wb")
+                pickle.dump(save, file)
+                file.close()
+
+            res = self.menu.show_menu(screen, clock_fps, self.stete_load_level, save)
             
             if res == "new_games":
+                file = open("Game\\save\\save.sv", "wb")
+                pickle.dump(0, file)
+                file.close()
                 self.show_test_level(0)
-            
+                
+            elif isinstance(res, int) and res < len(self.level):
+                self.show_test_level(res)
             
         except BreakError:
             print("BreakError")
