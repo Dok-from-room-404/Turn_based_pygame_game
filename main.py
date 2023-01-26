@@ -89,7 +89,6 @@ class Main:
         while game_process:
             # Если в меню выбрали закрыть меню
             if res == "break":
-                #print("break")
                 break 
             
             for event in pygame.event.get():
@@ -97,41 +96,66 @@ class Main:
                     game_process = False
                     break
                 
+                if event.type == MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        game.board.player.attack()
+                        game.board.player.turn += 1
+                
                 if event.type == KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        #print("K_ESCAPE")
                         res = game.show_menu(screen, clock_fps)
                         
                     elif event.key == K_UP or event.key == K_w:
-                        #print("k_UP")
                         if game.board.player.moving(y=-1):
                             game.board.player.turn += 1
                             
                     elif event.key == K_DOWN or event.key == K_s:
-                        #print("k_DOWN")
                         if game.board.player.moving(y=1):
                             game.board.player.turn += 1
                             
                     elif event.key == K_RIGHT or event.key == K_d:
-                        #print("k_RIGHT")
                         if game.board.player.moving(x=1):
                             game.board.player.turn += 1
                             
                     elif event.key == K_LEFT or event.key == K_a:
-                        #print("k_LEFT")
                         if game.board.player.moving(x=-1):
                             game.board.player.turn += 1
-                    elif event.key == K_SPACE:
-                        game.board.player.attack()
-                        game.board.player.turn += 1
-                    elif event.key == K_n:
+
+                    elif event.key == K_n or event.key == K_RETURN:
                         if game.board.savepoint.check():
                             save = game.board.savepoint.get_cur_num_of_lvl()
                             if save + 1 < len(game.levels):
                                 game.show_test_level(game.board.savepoint.make_save(save))
+                            else:
+                                winner = True
+                                while winner:
+                                    
+                                    f1 = pygame.font.SysFont('arial', 30)
+                                    text1 = f1.render('Вы полностью прошли игру!', 1, (255, 0, 0))
+                                    text2= f1.render('Нажмите любую клавишу для начала новой игры', 1, (255, 0, 0))
+
+
+                                    screen.blit(text1, (round(size[0] / 4), round(size[1] / 4)))
+                                    screen.blit(text2, (round(size[0] / 4), round(size[1] / 4) + 32))
+
+
+                                    pygame.display.update()
+                                    
+                                    for event in pygame.event.get():
+                                        if event.type == pygame.QUIT:
+                                            game_process = False
+                                            winner = False
+                                            break
+                                        
+                                        if event.type == KEYDOWN:
+                                            game.board.savepoint.make_save(0)
+                                            game.show_test_level(0)
+                                            winner = False
+                                            break
+                                                    
+                                    
          
             if res == "break":
-                #print("break")
                 break 
             game.run(screen)
             clock_fps.tick(fps)
