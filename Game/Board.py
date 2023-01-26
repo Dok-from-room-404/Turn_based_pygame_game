@@ -9,7 +9,7 @@ from .Sprites import *
 
 # Класс отвечающий за прорисовку уровня
 class Board:
-    def __init__(self, block_size:int=50, dic_image_from_level:dict={}, sp_ctop_block:list=[], actor_image:str="@") -> None:
+    def __init__(self, game, block_size:int=50, dic_image_from_level:dict={}, sp_ctop_block:list=[], actor_image:str="@") -> None:
         '''Инициализирует класс.\n
         block_size – Размер каждого блока\n
         dic_image_from_level - словарь с текстурами для игры где каждая текстура привязана к символу (для уровня)\n
@@ -19,6 +19,7 @@ class Board:
         self.dic_image_from_level = dic_image_from_level
         self.sp_ctop_block = sp_ctop_block
         self.actor_image = actor_image
+        self.game = game
 
     def new(self, map, camera):
         '''create a level'''
@@ -28,6 +29,7 @@ class Board:
         self.empty_tiles = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
+        self.num_of_enemies = 0
         self.moving_map = []
 
         for row, tiles in enumerate(self.map):
@@ -41,10 +43,15 @@ class Board:
                     self.player = Player(self, col, row, self.actor_image)
                     Tile(self, col, row)
                     self.moving_map[row].append(1)
+                elif tile == 's':
+                    Tile(self, col, row)
+                    self.savepoint = SavePoint(self, col, row, tile)
+                    self.moving_map[row].append(0)
                 elif tile == '/':
                     Enemy(self, col, row, tile)
                     Tile(self, col, row)
                     self.moving_map[row].append(1)
+                    self.num_of_enemies += 1
                 else:
                     Tile(self, col, row)
                     self.moving_map[row].append(0)
@@ -63,6 +70,7 @@ class Board:
         screen.fill((0, 0, 0))
         for sprite in self.empty_tiles:
             screen.blit(sprite.image, self.camera.apply(sprite))
+
         for sprite in self.all_sprites:
             screen.blit(sprite.image, self.camera.apply(sprite))
         pygame.display.update()

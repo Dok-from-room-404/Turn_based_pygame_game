@@ -124,6 +124,11 @@ class Main:
                     elif event.key == K_SPACE:
                         game.board.player.attack()
                         game.board.player.turn += 1
+                    elif event.key == K_n:
+                        if game.board.savepoint.check():
+                            save = game.board.savepoint.get_cur_num_of_lvl()
+                            if save + 1 < len(game.levels):
+                                game.show_test_level(game.board.savepoint.make_save(save))
          
             if res == "break":
                 #print("break")

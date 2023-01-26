@@ -1,8 +1,9 @@
 import pygame
+import pickle
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, board, x, y, image, hp=100, dmg=10):
+    def __init__(self, board, x, y, image, hp=100, dmg=100):
         self.groups = board.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.board = board
@@ -103,6 +104,7 @@ class Enemy(pygame.sprite.Sprite):
         if self.hp <= 0:
             self.kill()
             self.board.moving_map[self.y][self.x] = 0
+            self.board.num_of_enemies -= 1
 
     def create_graf(self):
         graf = {}
@@ -138,6 +140,36 @@ class Enemy(pygame.sprite.Sprite):
                     visited[next_move] = cur_move
 
         return visited
+
+
+class SavePoint(pygame.sprite.Sprite):
+    def __init__(self, board, x, y, image):
+        self.groups = board.empty_tiles
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.board = board
+        self.image = self.board.dic_image_from_level[image]
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * self.board.block_size
+        self.rect.y = y * self.board.block_size
+
+
+    def check(self):
+        if self.board.num_of_enemies == 0 and self.board.player.x == self.x and self.board.player.y == self.y:
+            return True
+        return False
+
+    def get_cur_num_of_lvl(self):
+        with open("Game\\save\\save.sv", "rb") as f:
+            return pickle.load(f)
+
+    def make_save(self, save):
+        with open("Game\\save\\save.sv", "wb") as f:
+            pickle.dump(save + 1, f)
+        return save + 1
+
+
 
 
 
