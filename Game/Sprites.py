@@ -3,7 +3,7 @@ import pickle
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, board, x, y, image, hp=100, dmg=100):
+    def __init__(self, board, x, y, image, hp=100, dmg=25):
         self.groups = board.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.board = board
@@ -30,9 +30,27 @@ class Player(pygame.sprite.Sprite):
         return False
 
     def attack(self):
+        f = False
         for enemy in self.board.enemies:
             if abs(enemy.x - self.x) + abs(enemy.y - self.y) == 1:
                 enemy.hp -= self.dmg
+                f = True
+        if f:
+            return f
+        return f
+
+    def drew_hp_bar(self, screen):
+        if self.hp > 65:
+            col = 'green'
+        elif self.hp > 30:
+            col = 'yellow'
+        else:
+            col = 'red'
+        w = int(150 * self.hp / 100)
+        self.hp_bar = pygame.Rect(20, 20, w, 20)
+        pygame.draw.rect(screen, col, self.hp_bar)
+
+
 
     def update(self):
         self.rect.x = self.x * self.board.block_size
@@ -86,6 +104,25 @@ class Enemy(pygame.sprite.Sprite):
         p_cor = (self.board.player.x, self.board.player.y)
         if abs(self.board.player.x - self.x) + abs(self.board.player.y - self.y) != 1 and p_cor in ways:
             self.make_move(ways)
+        elif abs(self.board.player.x - self.x) + abs(self.board.player.y - self.y) == 1:
+            self.attack()
+            print(self.board.player.hp)
+
+    def attack(self):
+        self.board.player.hp -= self.dmg
+
+    def draw_hp_bar(self, screen):
+        if self.hp > 65:
+            col = 'green'
+        elif self.hp > 30:
+            col = 'yellow'
+        else:
+            col = 'red'
+        w = int(self.rect.width * self.hp / 100)
+        r = self.board.camera.apply(self)
+        self.hp_bar = pygame.Rect(r[0], r[1],  w, 5)
+        if self.hp < 100:
+            pygame.draw.rect(screen, col, self.hp_bar)
 
     def make_move(self, ways):
         cur_move = (self.board.player.x, self.board.player.y)

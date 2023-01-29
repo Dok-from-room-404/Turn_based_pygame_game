@@ -72,14 +72,22 @@ class Main:
         size - список указывающий размеры окна игры\n
         fps - обозначает частоту обновления экрана [кадр/сек]\n
         block_size - размер блока'''
-        
+
+        pygame.mixer.pre_init(44100, -16, 1, 512)
         pygame.init()
         pygame.display.set_caption('Игра')
         
         clock_fps = pygame.time.Clock()
         
         screen = pygame.display.set_mode(size)
-        
+
+        pygame.mixer.music.load('sounds/determination.ogg')
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(0.1)
+        s_bit = pygame.mixer.Sound('sounds/bit.ogg')
+        s_bit.set_volume(0.1)
+
+
         game = Game(self.image, size, block_size)
         res = game.show_menu(screen, clock_fps)
         #print(res)
@@ -98,8 +106,9 @@ class Main:
                 
                 if event.type == MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        game.board.player.attack()
-                        game.board.player.turn += 1
+                        if game.board.player.attack():
+                            game.board.player.turn += 1
+                            s_bit.play()
                 
                 if event.type == KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
@@ -148,7 +157,7 @@ class Main:
                                             break
                                         
                                         if event.type == KEYDOWN:
-                                            game.board.savepoint.make_save(0)
+                                            game.board.savepoint.make_save(-1)
                                             game.show_test_level(0)
                                             winner = False
                                             break

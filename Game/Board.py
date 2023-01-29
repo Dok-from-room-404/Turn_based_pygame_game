@@ -70,12 +70,13 @@ class Board:
         screen.fill((0, 0, 0))
         for sprite in self.empty_tiles:
             screen.blit(sprite.image, self.camera.apply(sprite))
-
         for sprite in self.all_sprites:
             screen.blit(sprite.image, self.camera.apply(sprite))
+            if isinstance(sprite, Enemy):
+                sprite.draw_hp_bar(screen)
+        self.player.drew_hp_bar(screen)
         pygame.display.update()
 
-# Все что снизу можно перенести в отдельный файл
 class Camera:
     def __init__(self, game, width, height):
         self.camera = pygame.Rect(0, 0, width, height)
@@ -96,7 +97,6 @@ class Map:
     def __init__(self, game, level:list=[]):
         '''Инициализирует карту уровня\n
         level - уровень в виде списка'''
-        #Здесь должно быть считывание уровня из какого-либо источника, пока просто тестовый уровень
         self.map = level
         self.tile_width = len(self.map[0])
         self.tile_height = len(self.map)
