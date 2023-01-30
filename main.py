@@ -62,6 +62,12 @@ class Main:
             "opponent": pygame.image.load("images\\opponent\\{name}.png".format(name = name)),
             
             "hil": pygame.image.load("images\\hil\\{name}.png".format(name = name)),
+            "coin": {
+                "0": pygame.image.load("images\\coin\\0\\{name}.png".format(name = name)),
+                "45": pygame.image.load("images\\coin\\45\\{name}.png".format(name = name)),
+                "90": pygame.image.load("images\\coin\\90\\{name}.png".format(name = name)),
+                "135": pygame.image.load("images\\coin\\135\\{name}.png".format(name = name)),
+                },
         }
         return name
         
