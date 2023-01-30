@@ -60,6 +60,8 @@ class Main:
             "save_point": pygame.image.load("images\\save_point\\{name}.png".format(name = name)),
             
             "opponent": pygame.image.load("images\\opponent\\{name}.png".format(name = name)),
+            
+            "hil": pygame.image.load("images\\hil\\{name}.png".format(name = name)),
         }
         return name
         
