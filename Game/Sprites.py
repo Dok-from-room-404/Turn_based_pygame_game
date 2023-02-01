@@ -1,9 +1,10 @@
 import pygame
 import pickle
+import random
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, board, x, y, image, hp=100, dmg=25):
+    def __init__(self, board, x, y, image, hp=100, dmg=25, score=0):
         self.groups = board.all_sprites
         pygame.sprite.Sprite.__init__(self, self.groups)
         self.board = board
@@ -14,6 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.turn = 0
         self.hp = hp
         self.dmg = dmg
+        self.score = score
 
 
     def moving(self, x=0, y=0):
@@ -55,6 +57,26 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.rect.x = self.x * self.board.block_size
         self.rect.y = self.y * self.board.block_size
+
+    def take(self):
+        for item in self.board.items:
+            if self.x == item.x and self.y == item.y:
+                if isinstance(item, Potion):
+                    self.hp = 100
+                    item.kill()
+                    return 1
+                elif isinstance(item, Coin):
+                    self.score += 10
+                    item.kill()
+                    return 2
+
+    def check(self):
+        for item in self.board.items:
+            if self.x == item.x and self.y == item.y:
+                return True
+            return False
+
+
 
 
 class Wall(pygame.sprite.Sprite):
@@ -139,6 +161,10 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x = self.x * self.board.block_size
         self.rect.y = self.y * self.board.block_size
         if self.hp <= 0:
+            if random.randint(0, 2) == 1:
+                Potion(self.board, self.x, self.y)
+            else:
+                Coin(self.board, self.x, self.y)
             self.kill()
             self.board.moving_map[self.y][self.x] = 0
             self.board.num_of_enemies -= 1
@@ -207,6 +233,38 @@ class SavePoint(pygame.sprite.Sprite):
         return save + 1
 
 
+class Potion(pygame.sprite.Sprite):
+    def __init__(self, board, x, y):
+        self.groups = board.items, board.all_sprites
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.board = board
+        self.image = self.board.dic_image_from_level["P"]
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * self.board.block_size
+        self.rect.y = y * self.board.block_size
 
+class Coin(pygame.sprite.Sprite):
+    def __init__(self, board, x, y):
+        self.groups = board.items, board.all_sprites
+        pygame.sprite.Sprite.__init__(self, self.groups)
+        self.board = board
+        self.sheet = self.board.dic_image_from_level["C"]
+        self.cnt = 0
+        self.image = self.sheet[self.cnt]
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * self.board.block_size
+        self.rect.y = y * self.board.block_size
+
+
+    def update(self):
+        self.cnt += 0.25
+        if int(self.cnt) < 4:
+            self.image = self.sheet[int(self.cnt)]
+        else:
+            self.cnt = 0
 
 

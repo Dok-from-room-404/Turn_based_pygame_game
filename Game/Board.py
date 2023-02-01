@@ -29,6 +29,7 @@ class Board:
         self.empty_tiles = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
+        self.items = pygame.sprite.Group()
         self.num_of_enemies = 0
         self.moving_map = []
 

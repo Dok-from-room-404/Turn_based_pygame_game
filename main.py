@@ -62,12 +62,11 @@ class Main:
             "opponent": pygame.image.load("images\\opponent\\{name}.png".format(name = name)),
             
             "hil": pygame.image.load("images\\hil\\{name}.png".format(name = name)),
-            "coin": {
-                "0": pygame.image.load("images\\coin\\0\\{name}.png".format(name = name)),
-                "45": pygame.image.load("images\\coin\\45\\{name}.png".format(name = name)),
-                "90": pygame.image.load("images\\coin\\90\\{name}.png".format(name = name)),
-                "135": pygame.image.load("images\\coin\\135\\{name}.png".format(name = name)),
-                },
+            "coin": [pygame.image.load("images\\coin\\0\\{name}.png".format(name = name)),
+                     pygame.image.load("images\\coin\\45\\{name}.png".format(name = name)),
+                     pygame.image.load("images\\coin\\90\\{name}.png".format(name=name)),
+                     pygame.image.load("images\\coin\\135\\{name}.png".format(name=name))
+                     ]
         }
         return name
         
@@ -94,7 +93,10 @@ class Main:
         pygame.mixer.music.set_volume(0.1)
         s_bit = pygame.mixer.Sound('sounds/bit.ogg')
         s_bit.set_volume(0.1)
-
+        s_potion = pygame.mixer.Sound('sounds/potion.ogg')
+        s_potion.set_volume(0.1)
+        s_coin = pygame.mixer.Sound('sounds/coin.ogg')
+        s_coin.set_volume(0.1)
 
         game = Game(self.image, size, block_size)
         res = game.show_menu(screen, clock_fps)
@@ -105,7 +107,32 @@ class Main:
         while game_process:
             # Если в меню выбрали закрыть меню
             if res == "break":
-                break 
+                break
+
+            if game.board.player.hp <= 0:
+                dead = True
+                while dead:
+
+                    f1 = pygame.font.SysFont('arial', 30)
+                    text1 = f1.render('Вы погибли', 1, (255, 0, 0))
+                    text2 = f1.render('Нажмите любую клавишу для начала новой игры', 1, (255, 0, 0))
+
+                    screen.blit(text1, (round(size[0] / 4), round(size[1] / 4)))
+                    screen.blit(text2, (round(size[0] / 4), round(size[1] / 4) + 32))
+
+                    pygame.display.update()
+
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            game_process = False
+                            dead = False
+                            break
+
+                        if event.type == KEYDOWN:
+                            game.board.savepoint.make_save(-1)
+                            game.show_test_level(0)
+                            dead = False
+                            break
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -136,6 +163,15 @@ class Main:
                             
                     elif event.key == K_LEFT or event.key == K_a:
                         if game.board.player.moving(x=-1):
+                            game.board.player.turn += 1
+
+                    elif event.key == K_e:
+                        item = game.board.player.take()
+                        if item == 1:
+                            s_potion.play()
+                            game.board.player.turn += 1
+                        elif item == 2:
+                            s_coin.play()
                             game.board.player.turn += 1
 
                     elif event.key == K_n or event.key == K_RETURN:

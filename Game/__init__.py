@@ -36,7 +36,10 @@ class Game:
             
             "@": self.image["actor"],
             "s": self.image["save_point"],
-            "/": self.image["opponent"] }
+            "/": self.image["opponent"],
+            "P": self.image["hil"],
+            "C": self.image["coin"]
+        }
         
         # Список блоков препятствий
         self.sp_ctop_block = ["#", "$", ":", ";"]
