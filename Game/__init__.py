@@ -90,7 +90,7 @@ class Game:
         self.camera = Camera(self, self.level.width, self.level.height)
         self.board.new(self.level.map, self.camera)
 
-    def run(self, screen) -> None:
+    def run(self, screen, fps) -> None:
         '''Отрисовка'''
-        self.board.update()
+        self.board.update(fps)
         self.board.draw(screen)
