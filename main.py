@@ -129,8 +129,8 @@ class Main:
                             break
 
                         if event.type == KEYDOWN:
-                            game.board.savepoint.make_save(-1)
-                            game.show_test_level(0)
+                            save = game.board.savepoint.get_cur_num_of_lvl()
+                            game.show_test_level(save)
                             dead = False
                             break
             
