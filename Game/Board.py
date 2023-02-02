@@ -55,12 +55,12 @@ class Board:
                     Tile(self, col, row)
                     self.moving_map[row].append(0)
 
-    def update(self):
+    def update(self, fps):
         if self.player.turn == 2:
             for enemy in self.enemies:
                 enemy.action()
                 self.player.turn = 0
-        self.all_sprites.update()
+        self.all_sprites.update(fps)
         self.camera.update(self.player)
 
     def draw_score(self, screen):
