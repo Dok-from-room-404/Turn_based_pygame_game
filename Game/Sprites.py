@@ -51,7 +51,7 @@ class Player(pygame.sprite.Sprite):
         self.hp_bar = pygame.Rect(20, 20, w, 20)
         pygame.draw.rect(screen, col, self.hp_bar)
 
-    def update(self):
+    def update(self, *sp):
         self.rect.x = self.x * self.board.block_size
         self.rect.y = self.y * self.board.block_size
 
@@ -152,7 +152,7 @@ class Enemy(pygame.sprite.Sprite):
         self.y = way[-2][1]
         self.board.moving_map[self.y][self.x] = 1
 
-    def update(self):
+    def update(self, *sp):
         self.rect.x = self.x * self.board.block_size
         self.rect.y = self.y * self.board.block_size
         if self.hp <= 0:
@@ -262,8 +262,8 @@ class Coin(pygame.sprite.Sprite):
         self.rect.x = x * self.board.block_size
         self.rect.y = y * self.board.block_size
 
-    def update(self):
-        self.cnt += 0.25
+    def update(self, fps):
+        self.cnt += 0.25 * (30 / fps)
         if int(self.cnt) < 4:
             self.image = self.sheet[int(self.cnt)]
         else:
