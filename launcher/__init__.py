@@ -40,7 +40,7 @@ class Launcher:
         '''Подгонка интерфейса под масштаб системы'''
         screen = self.prog.screens()[0]
         scalling = screen.logicalDotsPerInchX() / 96.0
-        width = height = 360 * scalling
+        width = height = int(360 * scalling)
         self.window.setMinimumSize(QtCore.QSize(width, height))
         self.window.setMaximumSize(QtCore.QSize(width, height))
     

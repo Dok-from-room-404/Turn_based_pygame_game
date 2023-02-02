@@ -39,7 +39,7 @@ class Board:
                 elif tile == self.actor_image:
                     with open("Game\\save\\save.sv", "rb") as f:
                         save = pickle.load(f)
-                        self.player = Player(self, col, row, self.actor_image, hp=save[1], score=save[2])
+                        self.player = Player(self, col, row, self.actor_image, score=save[1])
                         Tile(self, col, row)
                         self.moving_map[row].append(1)
                 elif tile == 's':

@@ -226,8 +226,7 @@ class SavePoint(pygame.sprite.Sprite):
             with open("Game\\save\\save.sv", "wb") as f:
                 save = save
                 save[0] += 1
-                save[1] = self.board.player.hp
-                save[2] = self.board.player.score
+                save[1] = self.board.player.score
                 pickle.dump(save, f)
             return save[0]
         else:

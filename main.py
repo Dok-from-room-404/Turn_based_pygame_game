@@ -201,7 +201,7 @@ class Main:
                                             break
                                         
                                         if event.type == KEYDOWN:
-                                            game.board.savepoint.make_save([0, 100, 0], 0)
+                                            game.board.savepoint.make_save([0, 0], 0)
                                             game.show_test_level(0)
                                             winner = False
                                             break

@@ -61,7 +61,7 @@ class Game:
                 save = pickle.load(file)
                 file.close()
             except:
-                save = [0, 100, 0]
+                save = [0, 0]
                 file = open("Game\\save\\save.sv", "wb")
                 pickle.dump(save, file)
                 file.close()
@@ -70,7 +70,7 @@ class Game:
             
             if res == "new_games":
                 file = open("Game\\save\\save.sv", "wb")
-                pickle.dump([0, 100, 0], file)
+                pickle.dump([0, 0], file)
                 file.close()
                 self.show_test_level(0)
                 
