@@ -208,7 +208,7 @@ class Main:
          
             if res == "break":
                 break 
-            game.run(screen)
+            game.run(screen, fps)
             clock_fps.tick(fps)
             # смена (отрисовка) кадра:
             pygame.display.flip()
