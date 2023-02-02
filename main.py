@@ -102,7 +102,7 @@ class Main:
                     f1 = pygame.font.SysFont('arial', 30)
                     text1 = f1.render('Вы погибли', 1, (255, 0, 0))
                     text2 = f1.render(f'Ваш счет: {game.board.player.score}', 1, (255, 0, 0))
-                    text3 = f1.render('Нажмите любую клавишу для начала новой игры', 1, (255, 0, 0))
+                    text3 = f1.render('Нажмите любую клавишу чтобы продолжить', 1, (255, 0, 0))
 
                     screen.blit(text1, (round(size[0] / 4), round(size[1] / 4)))
                     screen.blit(text2, (round(size[0] / 4), round(size[1] / 4) + 32))
@@ -117,8 +117,8 @@ class Main:
                             break
 
                         if event.type == KEYDOWN:
-                            game.board.savepoint.make_save([0, 100, 0], 0)
-                            game.show_test_level(0)
+                            save = game.board.savepoint.get_cur_num_of_lvl()
+                            game.show_test_level(save[0])
                             dead = False
                             break
             
