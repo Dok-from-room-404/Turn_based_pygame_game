@@ -1,7 +1,3 @@
-
-
-
-
 import pickle
 
 
@@ -57,8 +53,6 @@ class Flager_Error(Exception):
             return 'Flager_Error, {0} '.format(self.message)
         else:
             return 'Flager_Error'
-
-
 
 
 simvol_floor = [".", ",", "/"]
@@ -177,12 +171,6 @@ class Writer:
         
     def __len__(self):
         return len(self.list_level)
-        
-
-
-
-
-
 
 
 if __name__ == "__main__":

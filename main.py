@@ -1,8 +1,3 @@
-
-
-
-
-# Импорт модулей
 import pygame
 from pygame.locals import *
 from Game import *
@@ -10,11 +5,6 @@ from Game import *
 from PIL import Image
 
 
-
-
-
-# Данный класс необходим для совмещения лаунчера и игры 
-# Основной класс ё
 class Main:
     def launcher(self) -> None:
         '''Необходима для запуска и получения инфы из лаунчера'''
@@ -24,7 +14,6 @@ class Main:
         fps : int = 30
         block_size : int = self.load_image(size, block_scaling)
         self.game(size, fps, block_size)
-
         
     def load_image(self, size:int, block_scaling:int=100) -> int:
         '''Необходима для выбора текстур по параметрам из лаунчера '''
@@ -41,7 +30,6 @@ class Main:
         image = Image.open("images\\Menu_fon\\fon.jpg")
         new_image = image.resize(size)
         new_image.save('images\\fon_cash.jpg')
-
         self.image = {
             "floor_grass": pygame.image.load("images\\floor\\grass\\{name}.png".format(name = name)),
             "floor_stone": pygame.image.load("images\\floor\\stone\\{name}.png".format(name = name)),
@@ -72,13 +60,13 @@ class Main:
         
     def command_last_game(self) -> None: '''Необходима для запуска лаунчера после игры'''
 
-        
-        
     def game(self, size:list=[1280, 720], fps:int=30, block_size:int=50) -> None:
-        '''Необходима для взаимодействия с игрой\n
+        '''
+        Необходима для взаимодействия с игрой\n
         size - список указывающий размеры окна игры\n
         fps - обозначает частоту обновления экрана [кадр/сек]\n
-        block_size - размер блока'''
+        block_size - размер блока
+        '''
 
         pygame.mixer.pre_init(44100, -16, 1, 512)
         pygame.init()
@@ -100,8 +88,6 @@ class Main:
 
         game = Game(self.image, size, block_size)
         res = game.show_menu(screen, clock_fps)
-        #print(res)
-        
         
         game_process = True
         while game_process:
@@ -115,10 +101,12 @@ class Main:
 
                     f1 = pygame.font.SysFont('arial', 30)
                     text1 = f1.render('Вы погибли', 1, (255, 0, 0))
-                    text2 = f1.render('Нажмите любую клавишу для начала новой игры', 1, (255, 0, 0))
+                    text2 = f1.render(f'Ваш счет: {game.board.player.score}', 1, (255, 0, 0))
+                    text3 = f1.render('Нажмите любую клавишу для начала новой игры', 1, (255, 0, 0))
 
                     screen.blit(text1, (round(size[0] / 4), round(size[1] / 4)))
                     screen.blit(text2, (round(size[0] / 4), round(size[1] / 4) + 32))
+                    screen.blit(text3, (round(size[0] / 4), round(size[1] / 4) + 64))
 
                     pygame.display.update()
 
@@ -129,7 +117,7 @@ class Main:
                             break
 
                         if event.type == KEYDOWN:
-                            game.board.savepoint.make_save(-1)
+                            game.board.savepoint.make_save([0, 100, 0], 0)
                             game.show_test_level(0)
                             dead = False
                             break
@@ -173,11 +161,13 @@ class Main:
                         elif item == 2:
                             s_coin.play()
                             game.board.player.turn += 1
+                    elif event.key == K_SPACE:
+                        game.board.player.turn += 1
 
                     elif event.key == K_n or event.key == K_RETURN:
                         if game.board.savepoint.check():
                             save = game.board.savepoint.get_cur_num_of_lvl()
-                            if save + 1 < len(game.levels):
+                            if save[0] + 1 < len(game.levels):
                                 game.show_test_level(game.board.savepoint.make_save(save))
                             else:
                                 winner = True
@@ -185,11 +175,12 @@ class Main:
                                     
                                     f1 = pygame.font.SysFont('arial', 30)
                                     text1 = f1.render('Вы полностью прошли игру!', 1, (255, 0, 0))
-                                    text2= f1.render('Нажмите любую клавишу для начала новой игры', 1, (255, 0, 0))
-
+                                    text2 = f1.render(f'Ваш счет: {game.board.player.score}', 1, (255, 0, 0))
+                                    text3 = f1.render('Нажмите любую клавишу для начала новой игры', 1, (255, 0, 0))
 
                                     screen.blit(text1, (round(size[0] / 4), round(size[1] / 4)))
                                     screen.blit(text2, (round(size[0] / 4), round(size[1] / 4) + 32))
+                                    screen.blit(text3, (round(size[0] / 4), round(size[1] / 4) + 64))
 
 
                                     pygame.display.update()
@@ -201,12 +192,10 @@ class Main:
                                             break
                                         
                                         if event.type == KEYDOWN:
-                                            game.board.savepoint.make_save(-1)
+                                            game.board.savepoint.make_save([0, 100, 0], 0)
                                             game.show_test_level(0)
                                             winner = False
                                             break
-                                                    
-                                    
          
             if res == "break":
                 break 
@@ -216,7 +205,6 @@ class Main:
             pygame.display.flip()
         # Убираем экран игры
         pygame.quit()
-        
 
 
 # Основная функция для работы с программой
@@ -229,7 +217,5 @@ def main():
     except: ...
 
 
-    
-    
 if __name__ == "__main__":
     main()

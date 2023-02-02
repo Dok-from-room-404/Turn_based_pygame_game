@@ -1,8 +1,3 @@
-
-
-
-
-# Импорт модулей
 import pygame
 from pygame.locals import *
 from .button import Button
@@ -15,10 +10,8 @@ def breaker():
     raise BreakError
 
 
-
-
 class Menu:
-    def __init__(self, image) -> None:
+    def __init__(self, image):
         '''Инициализация класса\n
         image – изображение меню'''
         self.image = image

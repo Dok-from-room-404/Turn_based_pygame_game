@@ -1,15 +1,8 @@
-
-
-
-
-# Импорт модулей
 import pygame
 from pygame.locals import *
 from .Board import *
 from .Menu.menu import *
 import pickle
-
-
 
 
 # Основной класс для взаимодействия с игрой
@@ -53,9 +46,7 @@ class Game:
         self.stete_load_level = False
         # Переменная для уровней
         self.levels = None
-        
-        
-        
+
     def show_menu(self, screen, clock_fps):
         """Отображает титульный экран, пока пользователь не нажмет клавишу\n
         1) Будем искать сохранения и уровни\n
@@ -68,19 +59,18 @@ class Game:
             try:
                 file = open("Game\\save\\save.sv", "rb")
                 save = pickle.load(file)
-                print(save)
                 file.close()
             except:
-                save = 0
+                save = [0, 100, 0]
                 file = open("Game\\save\\save.sv", "wb")
                 pickle.dump(save, file)
                 file.close()
 
-            res = self.menu.show_menu(screen, clock_fps, self.stete_load_level, save)
+            res = self.menu.show_menu(screen, clock_fps, self.stete_load_level, save[0])
             
             if res == "new_games":
                 file = open("Game\\save\\save.sv", "wb")
-                pickle.dump(0, file)
+                pickle.dump([0, 100, 0], file)
                 file.close()
                 self.show_test_level(0)
                 
@@ -88,13 +78,9 @@ class Game:
                 self.show_test_level(res)
             
         except BreakError:
-            print("BreakError")
             pygame.quit()
             return "break"
-        
-        
-        
-        
+
     def show_test_level(self, ind:int=0) -> None:
         '''Загрузка уровня, переход на следующий\n
         ind - № уровня (индекс списка уровней) № = индекс'''

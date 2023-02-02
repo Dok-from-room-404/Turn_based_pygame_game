@@ -1,8 +1,3 @@
-
-
-
-
-# Импорт модулей
 import sys
 import pygame
 from pygame.locals import *
@@ -33,7 +28,7 @@ class Button:
         self.font = pygame.font.SysFont(*fone)
         self.buttonSurf = self.font.render(buttonText, True, (20, 20, 20))
         # Статус кнопки (True - нажата, False - не нажата)
-        self.alreadyPressed =  True
+        self.alreadyPressed = True
 
     def process(self, screen):
         '''Клик по кнопке'''
@@ -66,24 +61,11 @@ class Button:
         screen.blit(self.buttonSurface, self.buttonRect)
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-if  __name__ == "__main__":
+if __name__ == "__main__":
 
     def myFunction():
         print('Button Pressed')
-        
-        
-        
+
     # Configuration
     pygame.init()
     fps = 60
@@ -93,13 +75,11 @@ if  __name__ == "__main__":
     
     customButton = Button(30, 30, 200, 50, 'Button One (onePress)', myFunction)
     customButton2 = Button(300, 200, 400, 100, 'Button One ', lambda: print(100))
-    
-    
+
     # Game loop.
     while True:
         screen.fill((20, 20, 20))
         for event in pygame.event.get():
-            #print(event)
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()

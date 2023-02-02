@@ -1,15 +1,11 @@
-
-
-
-
-# Импорт модулей
 import pygame
+import pickle
 from .Sprites import *
 
 
 # Класс отвечающий за прорисовку уровня
 class Board:
-    def __init__(self, game, block_size:int=50, dic_image_from_level:dict={}, sp_ctop_block:list=[], actor_image:str="@") -> None:
+    def __init__(self, game, block_size:int=50, dic_image_from_level:dict={}, sp_ctop_block:list=[], actor_image:str="@"):
         '''Инициализирует класс.\n
         block_size – Размер каждого блока\n
         dic_image_from_level - словарь с текстурами для игры где каждая текстура привязана к символу (для уровня)\n
@@ -41,9 +37,11 @@ class Board:
                     Tile(self, col, row)
                     self.moving_map[row].append(1)
                 elif tile == self.actor_image:
-                    self.player = Player(self, col, row, self.actor_image)
-                    Tile(self, col, row)
-                    self.moving_map[row].append(1)
+                    with open("Game\\save\\save.sv", "rb") as f:
+                        save = pickle.load(f)
+                        self.player = Player(self, col, row, self.actor_image, hp=save[1], score=save[2])
+                        Tile(self, col, row)
+                        self.moving_map[row].append(1)
                 elif tile == 's':
                     Tile(self, col, row)
                     self.savepoint = SavePoint(self, col, row, tile)
@@ -56,7 +54,6 @@ class Board:
                 else:
                     Tile(self, col, row)
                     self.moving_map[row].append(0)
-        print(self.moving_map)
 
     def update(self):
         if self.player.turn == 2:
@@ -66,6 +63,10 @@ class Board:
         self.all_sprites.update()
         self.camera.update(self.player)
 
+    def draw_score(self, screen):
+        f1 = pygame.font.SysFont('arial', 30)
+        text1 = f1.render(f"Ваш счёт: {self.player.score}", 1, (255, 0, 0))
+        screen.blit(text1, (20, 60))
 
     def draw(self, screen):
         screen.fill((0, 0, 0))
@@ -76,7 +77,9 @@ class Board:
             if isinstance(sprite, Enemy):
                 sprite.draw_hp_bar(screen)
         self.player.drew_hp_bar(screen)
+        self.draw_score(screen)
         pygame.display.update()
+
 
 class Camera:
     def __init__(self, game, width, height):
@@ -103,9 +106,3 @@ class Map:
         self.tile_height = len(self.map)
         self.width = self.tile_width * game.block_size
         self.height = self.tile_height * game.block_size
-
-
- 
-    
- 
-

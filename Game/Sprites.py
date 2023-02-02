@@ -17,7 +17,6 @@ class Player(pygame.sprite.Sprite):
         self.dmg = dmg
         self.score = score
 
-
     def moving(self, x=0, y=0):
         if self.collide_with_walls(x, y):
             self.board.moving_map[self.y][self.x] = 0
@@ -52,8 +51,6 @@ class Player(pygame.sprite.Sprite):
         self.hp_bar = pygame.Rect(20, 20, w, 20)
         pygame.draw.rect(screen, col, self.hp_bar)
 
-
-
     def update(self):
         self.rect.x = self.x * self.board.block_size
         self.rect.y = self.y * self.board.block_size
@@ -75,8 +72,6 @@ class Player(pygame.sprite.Sprite):
             if self.x == item.x and self.y == item.y:
                 return True
             return False
-
-
 
 
 class Wall(pygame.sprite.Sprite):
@@ -217,7 +212,6 @@ class SavePoint(pygame.sprite.Sprite):
         self.rect.x = x * self.board.block_size
         self.rect.y = y * self.board.block_size
 
-
     def check(self):
         if self.board.num_of_enemies == 0 and self.board.player.x == self.x and self.board.player.y == self.y:
             return True
@@ -227,10 +221,20 @@ class SavePoint(pygame.sprite.Sprite):
         with open("Game\\save\\save.sv", "rb") as f:
             return pickle.load(f)
 
-    def make_save(self, save):
-        with open("Game\\save\\save.sv", "wb") as f:
-            pickle.dump(save + 1, f)
-        return save + 1
+    def make_save(self, save, n=1):
+        if n:
+            with open("Game\\save\\save.sv", "wb") as f:
+                save = save
+                save[0] += 1
+                save[1] = self.board.player.hp
+                save[2] = self.board.player.score
+                pickle.dump(save, f)
+            return save[0]
+        else:
+            with open("Game\\save\\save.sv", "wb") as f:
+                save = save
+                pickle.dump(save, f)
+            return save[0]
 
 
 class Potion(pygame.sprite.Sprite):
@@ -258,7 +262,6 @@ class Coin(pygame.sprite.Sprite):
         self.y = y
         self.rect.x = x * self.board.block_size
         self.rect.y = y * self.board.block_size
-
 
     def update(self):
         self.cnt += 0.25
