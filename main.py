@@ -79,7 +79,7 @@ class Main:
 
         pygame.mixer.pre_init(44100, -16, 1, 512)
         pygame.init()
-        pygame.display.set_caption('Игра')
+        pygame.display.set_caption('pyDungeon')
         
         clock_fps = pygame.time.Clock()
         
